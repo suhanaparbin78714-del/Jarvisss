@@ -36,7 +36,6 @@ html,body{
 
 #app{display:flex;flex-direction:column;padding:6px;gap:6px;max-width:420px;margin:0 auto;position:relative;z-index:10}
 
-/* LEFT PANEL */
 #left{display:flex;gap:6px;background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:6px;}
 #cam-box{width:90px;flex-shrink:0;border-radius:6px;border:1px solid var(--border);background:#080c10;overflow:hidden;position:relative;aspect-ratio:4/3;}
 #cam-video{width:100%;height:100%;object-fit:cover;display:none}
@@ -52,10 +51,7 @@ html,body{
 .news-counter{font-size:7px;color:var(--text-dim);}
 .news-refresh-btn{background:none;border:1px solid var(--border);color:var(--cyan);font-size:7px;cursor:pointer;padding:2px 6px;border-radius:4px;}
 
-/* CENTER PANEL */
 #center{display:flex;flex-direction:column;gap:6px}
-
-/* ARC REACTOR */
 .arc-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:15px;text-align:center;position:relative;overflow:hidden;}
 .arc-reactor{width:60px;height:60px;border-radius:50%;margin:0 auto;border:3px solid var(--cyan);box-shadow:0 0 25px var(--cyan),0 0 50px rgba(0,229,255,0.3),inset 0 0 15px rgba(0,229,255,0.1);animation:reactorSpin 4s linear infinite;display:flex;align-items:center;justify-content:center;}
 @keyframes reactorSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
@@ -67,7 +63,6 @@ html,body{
 .arc-label{font-size:7px;color:var(--cyan);margin-top:8px;letter-spacing:2px;animation:blink-text 2s infinite}
 @keyframes blink-text{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* APP POPUP */
 .app-popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;background:rgba(0,0,0,0.95);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;box-shadow:0 0 60px rgba(0,229,255,0.4);animation:popIn 0.3s ease}
 .app-popup.show{display:block}
 @keyframes popIn{from{transform:translate(-50%,-50%) scale(0.7);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
@@ -95,7 +90,6 @@ html,body{
 .vh-title{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:var(--text-bright);margin:4px 0}
 .vh-status{font-size:7px;color:var(--cyan);animation:blink-text 2s infinite}
 
-/* RIGHT PANEL */
 #right{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:8px;}
 #trans-title{font-family:'Orbitron',monospace;font-size:9px;color:var(--cyan)}
 .ucmd-bubble,.sr-bubble,.trans-bubble{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.5;min-height:24px;color:var(--text);}
@@ -139,140 +133,122 @@ html,body{
 <body>
 <canvas id="matrix-bg"></canvas>
 
-<div id="titlebar">
-  <div class="tb-icon">🔷</div><div class="tb-logo">STONIC</div>
-  <button class="tb-mic" id="tbMic" onclick="toggleVoice()">🎤</button>
-  <button class="tb-gear" onclick="openSettings()">⚙</button>
-</div>
+<div id="titlebar"><div class="tb-icon">🔷</div><div class="tb-logo">STONIC</div><button class="tb-mic" id="tbMic" onclick="toggleVoice()">🎤</button><button class="tb-gear" onclick="openSettings()">⚙</button></div>
 
 <div id="app">
   <div id="left">
-    <div id="cam-box">
-      <video id="cam-video" autoplay muted playsinline></video>
-      <div id="cam-placeholder"><div style="font-size:18px;opacity:.3">📷</div><div style="font-size:7px;color:var(--text-dim)">camera offline</div></div>
-      <button class="cam-corner" id="camToggleBtn" onclick="toggleCamera()">⊙</button>
-      <button class="cam-ask-btn" onclick="captureAndAsk()">👁️</button>
-    </div>
-    <div id="dsktp-box">
-      <div class="dsktp-header"><span>STONIC_DSKTP</span><span style="font-size:7px;color:var(--text-dim)">v3.0</span></div>
-      <div class="dsktp-news" id="dsktpNews"><div class="news-line">⚡ Loading news...</div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:2px;">
-        <span class="news-counter" id="newsCounter">-</span>
-        <button class="news-refresh-btn" onclick="fetchNews()">↻</button>
-      </div>
-    </div>
+    <div id="cam-box"><video id="cam-video" autoplay muted playsinline></video><div id="cam-placeholder"><div style="font-size:18px;opacity:.3">📷</div><div style="font-size:7px;color:var(--text-dim)">camera offline</div></div><button class="cam-corner" id="camToggleBtn" onclick="toggleCamera()">⊙</button><button class="cam-ask-btn" onclick="captureAndAsk()">👁️</button></div>
+    <div id="dsktp-box"><div class="dsktp-header"><span>STONIC_DSKTP</span><span style="font-size:7px;color:var(--text-dim)">v3.0</span></div><div class="dsktp-news" id="dsktpNews"><div class="news-line">⚡ Loading news...</div></div><div style="display:flex;justify-content:space-between;margin-top:2px;"><span class="news-counter" id="newsCounter">-</span><button class="news-refresh-btn" onclick="fetchNews()">↻</button></div></div>
   </div>
-
   <div id="center">
-    <!-- ARC REACTOR -->
-    <div class="arc-box">
-      <div class="arc-ring"></div><div class="arc-ring"></div><div class="arc-ring"></div>
-      <div class="arc-reactor"><div class="arc-core"></div></div>
-      <div class="arc-label">SYSTEM ACTIVE</div>
-    </div>
-
-    <!-- Quick Actions -->
+    <div class="arc-box"><div class="arc-ring"></div><div class="arc-ring"></div><div class="arc-ring"></div><div class="arc-reactor"><div class="arc-core"></div></div><div class="arc-label">SYSTEM ACTIVE</div></div>
     <div id="quickactions-row">
-      <div class="qa-chip" onclick="openFileUpload()"><span class="qa-dot-sm blue"></span>📂UPLOAD</div>
-      <div class="qa-chip" onclick="showPanel('MEMORY')"><span class="qa-dot-sm red"></span>🧠MEMORY</div>
-      <div class="qa-chip" onclick="showPanel('HISTORY')"><span class="qa-dot-sm teal"></span>🕒HISTORY</div>
-      <div class="qa-chip" onclick="showPanel('USER')"><span class="qa-dot-sm gray"></span>👤USER</div>
-      <div class="qa-chip" onclick="launchApp('youtube')"><span class="qa-dot-sm red"></span>▶️</div>
-      <div class="qa-chip" onclick="launchApp('whatsapp')"><span class="qa-dot-sm teal"></span>💬</div>
-      <div class="qa-chip" onclick="launchApp('call')"><span class="qa-dot-sm blue"></span>📞</div>
-      <div class="qa-chip" onclick="launchApp('music')"><span class="qa-dot-sm red"></span>🎵</div>
-      <div class="qa-chip" onclick="launchApp('map')"><span class="qa-dot-sm teal"></span>📍</div>
-      <div class="qa-chip" onclick="launchApp('alarm')"><span class="qa-dot-sm blue"></span>⏰</div>
+      <div class="qa-chip" onclick="openFileUpload()"><span class="qa-dot-sm blue"></span>📂UPLOAD</div><div class="qa-chip" onclick="showPanel('MEMORY')"><span class="qa-dot-sm red"></span>🧠MEMORY</div><div class="qa-chip" onclick="showPanel('HISTORY')"><span class="qa-dot-sm teal"></span>🕒HISTORY</div><div class="qa-chip" onclick="showPanel('USER')"><span class="qa-dot-sm gray"></span>👤USER</div>
+      <div class="qa-chip" onclick="launchApp('youtube')"><span class="qa-dot-sm red"></span>▶️</div><div class="qa-chip" onclick="launchApp('whatsapp')"><span class="qa-dot-sm teal"></span>💬</div><div class="qa-chip" onclick="launchApp('call')"><span class="qa-dot-sm blue"></span>📞</div><div class="qa-chip" onclick="launchApp('music')"><span class="qa-dot-sm red"></span>🎵</div><div class="qa-chip" onclick="launchApp('map')"><span class="qa-dot-sm teal"></span>📍</div><div class="qa-chip" onclick="launchApp('alarm')"><span class="qa-dot-sm blue"></span>⏰</div>
     </div>
-
     <div id="netviz"><canvas id="netviz-canvas"></canvas></div>
-    <div id="visual-hub">
-      <div><span class="vh-badge">VISUAL HUB</span> <span style="font-size:8px;color:var(--text-dim)">READY</span></div>
-      <div class="vh-layers">⊞</div>
-      <div class="vh-title">VISUAL INTELLIGENCE HUB</div>
-      <div style="font-size:8px;color:var(--text-dim)">Images & Flowcharts appear here</div>
-      <div class="vh-status">SYSTEM READY</div>
-    </div>
+    <div id="visual-hub"><div><span class="vh-badge">VISUAL HUB</span> <span style="font-size:8px;color:var(--text-dim)">READY</span></div><div class="vh-layers">⊞</div><div class="vh-title">VISUAL INTELLIGENCE HUB</div><div style="font-size:8px;color:var(--text-dim)">Images & Flowcharts appear here</div><div class="vh-status">SYSTEM READY</div></div>
   </div>
-
   <div id="right">
     <div><span id="trans-title">TRANSCRIPTION</span></div>
     <div><div style="font-size:7px;color:var(--text-dim)">USER_CMD</div><div class="ucmd-bubble" id="ucmd-bubble">...</div></div>
-    <div>
-      <div style="font-size:7px;color:#ff9944"><span class="sr-dot" id="sr-dot"></span>STONIC_RESPONSE <span class="think-dots" id="think-dots"><span class="think-dot"></span><span class="think-dot"></span><span class="think-dot"></span></span></div>
-      <div class="sr-bubble" id="sr-bubble">Hello! I am STONIC.</div>
-    </div>
+    <div><div style="font-size:7px;color:#ff9944"><span class="sr-dot" id="sr-dot"></span>STONIC_RESPONSE <span class="think-dots" id="think-dots"><span class="think-dot"></span><span class="think-dot"></span><span class="think-dot"></span></span></div><div class="sr-bubble" id="sr-bubble">Hello! I am STONIC.</div></div>
     <div><div style="font-size:7px;color:var(--text-dim)">TRANSCRIBING...</div><div class="trans-bubble" id="trans-bubble">Ready.</div></div>
-    <div id="cmd-row">
-      <input id="cmd-input" type="text" placeholder="TYPE OR SPEAK..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendCmd();}" autocomplete="off"/>
-      <button id="cmd-send" onclick="sendCmd()">➤</button>
-    </div>
+    <div id="cmd-row"><input id="cmd-input" type="text" placeholder="TYPE OR SPEAK..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendCmd();}" autocomplete="off"/><button id="cmd-send" onclick="sendCmd()">➤</button></div>
     <div style="font-size:7px;color:var(--text-dim)"><span style="color:var(--green)" id="statusDot">● ACTIVE</span></div>
   </div>
 </div>
 
-<!-- APP POPUP -->
-<div class="app-popup" id="appPopup">
-  <div class="app-popup-icon" id="popupIcon">📱</div>
-  <div class="app-popup-text" id="popupText">Opening...</div>
-  <div class="app-popup-sub" id="popupSub">STONIC Assistant</div>
-</div>
+<div class="app-popup" id="appPopup"><div class="app-popup-icon" id="popupIcon">📱</div><div class="app-popup-text" id="popupText">Opening...</div><div class="app-popup-sub" id="popupSub">STONIC Assistant</div></div>
 
-<!-- UPLOAD MODAL -->
-<div class="modal" id="uploadModal"><div class="modal-box">
-  <div class="modal-hdr"><span style="color:var(--cyan);">📂 FILE + PROMPT</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('uploadModal')">✕</button></div>
-  <div class="modal-body">
-    <div class="file-drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()"><div style="font-size:28px;">📤</div><div style="font-size:9px;color:var(--text-dim)">Tap to upload</div><div class="file-name" id="fileName"></div></div>
-    <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(this)" accept="*/*"/>
-    <div class="sf"><label>📝 PROMPT</label><textarea id="filePrompt" rows="2" placeholder="What to do with this file?"></textarea></div>
-    <button class="btn-save" onclick="processFileUpload()">🚀 PROCESS</button>
-  </div>
-</div></div>
+<div class="modal" id="uploadModal"><div class="modal-box"><div class="modal-hdr"><span style="color:var(--cyan);">📂 FILE + PROMPT</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('uploadModal')">✕</button></div><div class="modal-body"><div class="file-drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()"><div style="font-size:28px;">📤</div><div style="font-size:9px;color:var(--text-dim)">Tap to upload</div><div class="file-name" id="fileName"></div></div><input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(this)" accept="*/*"/><div class="sf"><label>📝 PROMPT</label><textarea id="filePrompt" rows="2" placeholder="What to do with this file?"></textarea></div><button class="btn-save" onclick="processFileUpload()">🚀 PROCESS</button></div></div></div>
 
-<!-- INFO PANEL -->
-<div class="modal" id="infoPanel"><div class="modal-box">
-  <div class="modal-hdr"><span id="infoTitle" style="color:var(--cyan);">INFO</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('infoPanel')">✕</button></div>
-  <div class="modal-body"><div class="panel-content" id="infoContent"></div></div>
-</div></div>
+<div class="modal" id="infoPanel"><div class="modal-box"><div class="modal-hdr"><span id="infoTitle" style="color:var(--cyan);">INFO</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('infoPanel')">✕</button></div><div class="modal-body"><div class="panel-content" id="infoContent"></div></div></div></div>
 
-<!-- SETTINGS MODAL -->
-<div class="modal" id="settingsModal"><div class="modal-box">
-  <div class="modal-hdr"><span style="color:var(--cyan);">⚙ API CONFIG</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('settingsModal')">✕</button></div>
-  <div class="modal-body">
+<div class="modal" id="settingsModal"><div class="modal-box"><div class="modal-hdr"><span style="color:var(--cyan);">⚙ API CONFIG</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('settingsModal')">✕</button></div><div class="modal-body">
     <div class="sf"><label>OpenRouter API Key</label><input type="password" id="api-key"/></div>
     <div class="sf"><label>Model</label><select id="api-model"></select></div>
     <div class="sf"><label>Google Gemini (Vision)</label><input type="password" id="vision-key"/></div>
-    <div class="sf"><label>GNews API Key</label><input type="password" id="news-key"/></div>
+    <div class="sf"><label>📰 GNews API Key (FREE: gnews.io)</label><input type="password" id="news-key" placeholder="Get from gnews.io"/></div>
+    <div class="toggle-row"><span>📰 News ON</span><label class="tgl"><input type="checkbox" id="news-toggle" checked onchange="localStorage.setItem('s_news',this.checked?'on':'off')"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
     <div class="sf"><label>Stability AI (Image Gen)</label><input type="password" id="stability-key"/></div>
     <div class="sf"><label>🎙️ ElevenLabs API Key</label><input type="password" id="elevenlabs-key"/></div>
     <div class="sf"><label>🎙️ ElevenLabs Voice ID</label><input type="text" id="voice-id"/></div>
     <div class="toggle-row"><span>🎙️ Use ElevenLabs Voice</span><label class="tgl"><input type="checkbox" id="use-11labs"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
     <button class="btn-save" onclick="saveSettings()">◈ SAVE ◈</button>
-  </div>
-</div></div>
+</div></div></div>
 
 <script>
-// ═══════════════ MATRIX BG ═══════════════
-(function(){const c=document.getElementById('matrix-bg'),x=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;const chars='アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789';const drops=Array(Math.floor(c.width/15)).fill(1);function draw(){x.fillStyle='rgba(0,0,0,0.05)';x.fillRect(0,0,c.width,c.height);x.fillStyle='#0f0';x.font='12px monospace';for(let i=0;i<drops.length;i++){const t=chars[Math.floor(Math.random()*chars.length)];x.fillText(t,i*15,drops[i]*15);if(drops[i]*15>c.height&&Math.random()>.975)drops[i]=0;drops[i]++;}}setInterval(draw,50);})();
+(function(){var c=document.getElementById('matrix-bg'),x=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;var chars='アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789';var drops=Array(Math.floor(c.width/15)).fill(1);function draw(){x.fillStyle='rgba(0,0,0,0.05)';x.fillRect(0,0,c.width,c.height);x.fillStyle='#0f0';x.font='12px monospace';for(var i=0;i<drops.length;i++){var t=chars[Math.floor(Math.random()*chars.length)];x.fillText(t,i*15,drops[i]*15);if(drops[i]*15>c.height&&Math.random()>.975)drops[i]=0;drops[i]++;}}setInterval(draw,50);})();
 
-// ═══════════════ APP LAUNCHER ═══════════════
 function showPopup(icon,text,sub){document.getElementById('popupIcon').textContent=icon;document.getElementById('popupText').textContent=text;document.getElementById('popupSub').textContent=sub;document.getElementById('appPopup').classList.add('show');setTimeout(function(){document.getElementById('appPopup').classList.remove('show');},2000);}
 function launchApp(app){switch(app){case'youtube':openUrl('https://youtube.com');showPopup('▶️','YouTube','Opening...');break;case'whatsapp':openUrl('https://wa.me/');showPopup('💬','WhatsApp','Opening...');break;case'call':openUrl('tel:');showPopup('📞','Dialer','Opening...');break;case'music':openUrl('https://music.youtube.com');showPopup('🎵','Music','Opening...');break;case'map':openUrl('https://maps.google.com');showPopup('📍','Maps','Opening...');break;case'alarm':openUrl('clock:');showPopup('⏰','Clock','Opening...');break;}}
 function openUrl(url){try{window.location.href=url;}catch(e){window.open(url,'_blank');}}
 
-// ═══════════════ NEWS ═══════════════
+// ═══════════════ NEWS — FIXED ═══════════════
 var newsItems=[],newsIndex=0,newsTimer=null;
-function fetchNews(){var box=document.getElementById('dsktpNews');box.innerHTML='<div class="news-line">⚡ Fetching...</div>';var items=[];try{fetch('https://api.duckduckgo.com/?q=india+news+today&format=json&no_html=1').then(function(r){return r.json();}).then(function(d){if(d.RelatedTopics)items=d.RelatedTopics.filter(function(t){return t.Text;}).map(function(t){return t.Text.split(' - ')[0].trim();});if(items.length===0)items=['Technology updates today','AI systems operational','Global markets update'];newsItems=items;newsIndex=0;displayNews();startNews();});}catch(e){}if(items.length===0){items=['Technology updates today','AI systems operational','Global markets update'];newsItems=items;newsIndex=0;displayNews();startNews();}}
-function displayNews(){var box=document.getElementById('dsktpNews');var h='';for(var i=0;i<3;i++){h+='<div class="news-line">⚡ '+newsItems[(newsIndex+i)%newsItems.length]+'</div>';}box.innerHTML=h;document.getElementById('newsCounter').textContent=(newsIndex+1)+'-'+Math.min(newsIndex+3,newsItems.length)+'/'+newsItems.length;}
+function fetchNews(){
+  var box=document.getElementById('dsktpNews');
+  box.innerHTML='<div class="news-line">⚡ Fetching news...</div>';
+  var nk=localStorage.getItem('s_news_key')||'';
+  var newsOn=localStorage.getItem('s_news')!=='off';
+  
+  // Try GNews first if key exists
+  if(nk&&newsOn){
+    fetch('https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=in&max=10&apikey='+nk)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.articles&&d.articles.length>0){
+        newsItems=d.articles.map(function(a){return a.title;});
+        newsIndex=0;displayNews();startNews();
+      }else{
+        fetchDDGNews();
+      }
+    }).catch(function(){
+      fetchDDGNews();
+    });
+  }else{
+    fetchDDGNews();
+  }
+}
+
+function fetchDDGNews(){
+  fetch('https://api.duckduckgo.com/?q=india+news+today&format=json&no_html=1')
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var items=[];
+    if(d.RelatedTopics){
+      items=d.RelatedTopics.filter(function(t){return t.Text;}).map(function(t){return t.Text.split(' - ')[0].trim();});
+    }
+    if(d.AbstractText) items.unshift(d.AbstractText);
+    if(items.length===0) items=['Latest technology updates today','AI systems operational worldwide','Global markets show positive trends','New innovations in renewable energy','Sports highlights this week'];
+    newsItems=items.slice(0,15);
+    newsIndex=0;displayNews();startNews();
+  }).catch(function(){
+    newsItems=['Technology updates today','AI systems operational','Global markets update','Sports highlights','Business news'];
+    newsIndex=0;displayNews();startNews();
+  });
+}
+
+function displayNews(){
+  var box=document.getElementById('dsktpNews');
+  var h='';
+  for(var i=0;i<3;i++){
+    if(newsItems.length>0){
+      h+='<div class="news-line">⚡ '+newsItems[(newsIndex+i)%newsItems.length]+'</div>';
+    }
+  }
+  box.innerHTML=h||'<div class="news-line">⚡ No news available</div>';
+  document.getElementById('newsCounter').textContent=(newsIndex+1)+'-'+Math.min(newsIndex+3,newsItems.length)+'/'+newsItems.length;
+}
 function advanceNews(){newsIndex=(newsIndex+1)%newsItems.length;displayNews();startNews();}
 function startNews(){if(newsTimer)clearInterval(newsTimer);newsTimer=setInterval(advanceNews,10000);}
+document.getElementById('dsktpNews').addEventListener('click',advanceNews);
 fetchNews();
 
-// ═══════════════ CONTACTS ═══════════════
 var contacts=JSON.parse(localStorage.getItem('stonic_contacts')||'[]');
 function findContact(name){var n=name.toLowerCase().trim();return contacts.find(function(c){return c.name.toLowerCase().includes(n)||n.includes(c.name.toLowerCase());});}
 
-// ═══════════════ FILE UPLOAD ═══════════════
 var uploadedFile=null;
 function openFileUpload(){document.getElementById('uploadModal').classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -281,69 +257,82 @@ function processFileUpload(){
   if(!uploadedFile){setResponse('Select a file first.');return;}
   var prompt=document.getElementById('filePrompt').value.trim()||'Describe this file';
   closeModal('uploadModal');setUCmd('[FILE] '+prompt);setResponse('Processing...');
-  if(uploadedFile.type.startsWith('image/')){
-    var reader=new FileReader();
-    reader.onload=function(e){var img=e.target.result;document.getElementById('vh-body').innerHTML='<img src="'+img+'" style="max-width:100%;max-height:200px;border-radius:8px;"/>';var vk=localStorage.getItem('s_vision_key')||'';if(vk){var b64=img.split(',')[1];try{fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+vk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:uploadedFile.type,data:b64}}]}]})}).then(function(r){return r.json();}).then(function(d){var txt=cleanText(d.candidates?.[0]?.content?.parts?.[0]?.text||'Cannot analyze.');setResponse(txt);speakClean(txt);});}catch(e){setResponse('Vision error.');}}else{callAI('Image uploaded. Prompt: '+prompt).then(function(reply){setResponse(reply);});}};reader.readAsDataURL(uploadedFile);
-  }else if(uploadedFile.type.startsWith('text/')||uploadedFile.name.match(/\.(json|js|py|html|css|txt)$/)){var reader2=new FileReader();reader2.onload=function(e){callAI('File: '+e.target.result.substring(0,2000)+'\nPrompt: '+prompt).then(function(reply){setResponse(reply);speakClean(reply);});};reader2.readAsText(uploadedFile);}
+  if(uploadedFile.type.startsWith('image/')){var reader=new FileReader();reader.onload=function(e){var img=e.target.result;document.getElementById('vh-body').innerHTML='<img src="'+img+'" style="max-width:100%;max-height:200px;border-radius:8px;"/>';var vk=localStorage.getItem('s_vision_key')||'';if(vk){var b64=img.split(',')[1];try{fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+vk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:uploadedFile.type,data:b64}}]}]})}).then(function(r){return r.json();}).then(function(d){var txt=cleanText(d.candidates?.[0]?.content?.parts?.[0]?.text||'Cannot analyze.');setResponse(txt);speakClean(txt);});}catch(e){setResponse('Vision error.');}}else{callAI('Image uploaded. Prompt: '+prompt).then(function(reply){setResponse(reply);});}};reader.readAsDataURL(uploadedFile);}
+  else if(uploadedFile.type.startsWith('text/')||uploadedFile.name.match(/\.(json|js|py|html|css|txt)$/)){var reader2=new FileReader();reader2.onload=function(e){callAI('File: '+e.target.result.substring(0,2000)+'\nPrompt: '+prompt).then(function(reply){setResponse(reply);speakClean(reply);});};reader2.readAsText(uploadedFile);}
   else{setResponse('Type: '+uploadedFile.type+'. Prompt: '+prompt);}
   uploadedFile=null;document.getElementById('fileName').textContent='';document.getElementById('filePrompt').value='';document.getElementById('dropArea').classList.remove('has-file');
 }
 
-// ═══════════════ SETTINGS ═══════════════
 var cfg={key:localStorage.getItem('s_key')||'',model:localStorage.getItem('s_model')||'openai/gpt-oss-120b:free'};
-function openSettings(){document.getElementById('api-key').value=cfg.key;document.getElementById('vision-key').value=localStorage.getItem('s_vision_key')||'';document.getElementById('news-key').value=localStorage.getItem('s_news_key')||'';document.getElementById('stability-key').value=localStorage.getItem('s_stability_key')||'';document.getElementById('elevenlabs-key').value=localStorage.getItem('11labs_key')||'';document.getElementById('voice-id').value=localStorage.getItem('11labs_voice')||'';document.getElementById('use-11labs').checked=localStorage.getItem('use_11labs')==='on';populateModelSelect();document.getElementById('settingsModal').classList.add('open');}
-function saveSettings(){localStorage.setItem('s_key',document.getElementById('api-key').value.trim());localStorage.setItem('s_model',document.getElementById('api-model').value);localStorage.setItem('s_vision_key',document.getElementById('vision-key').value.trim());localStorage.setItem('s_news_key',document.getElementById('news-key').value.trim());localStorage.setItem('s_stability_key',document.getElementById('stability-key').value.trim());localStorage.setItem('11labs_key',document.getElementById('elevenlabs-key').value.trim());localStorage.setItem('11labs_voice',document.getElementById('voice-id').value.trim());cfg.key=localStorage.getItem('s_key')||'';cfg.model=localStorage.getItem('s_model')||'openai/gpt-oss-120b:free';closeModal('settingsModal');setResponse('Settings saved!');}
+function openSettings(){
+  document.getElementById('api-key').value=cfg.key;
+  document.getElementById('vision-key').value=localStorage.getItem('s_vision_key')||'';
+  document.getElementById('news-key').value=localStorage.getItem('s_news_key')||'';
+  document.getElementById('stability-key').value=localStorage.getItem('s_stability_key')||'';
+  document.getElementById('elevenlabs-key').value=localStorage.getItem('11labs_key')||'';
+  document.getElementById('voice-id').value=localStorage.getItem('11labs_voice')||'';
+  document.getElementById('use-11labs').checked=localStorage.getItem('use_11labs')==='on';
+  document.getElementById('news-toggle').checked=localStorage.getItem('s_news')!=='off';
+  populateModelSelect();document.getElementById('settingsModal').classList.add('open');
+}
+function saveSettings(){
+  localStorage.setItem('s_key',document.getElementById('api-key').value.trim());
+  localStorage.setItem('s_model',document.getElementById('api-model').value);
+  localStorage.setItem('s_vision_key',document.getElementById('vision-key').value.trim());
+  localStorage.setItem('s_news_key',document.getElementById('news-key').value.trim());
+  localStorage.setItem('s_stability_key',document.getElementById('stability-key').value.trim());
+  localStorage.setItem('11labs_key',document.getElementById('elevenlabs-key').value.trim());
+  localStorage.setItem('11labs_voice',document.getElementById('voice-id').value.trim());
+  cfg.key=localStorage.getItem('s_key')||'';cfg.model=localStorage.getItem('s_model')||'openai/gpt-oss-120b:free';
+  closeModal('settingsModal');setResponse('Saved!');
+  fetchNews();
+}
 
-// ═══════════════ INFO PANELS ═══════════════
-function showPanel(type){var t=document.getElementById('infoTitle'),c=document.getElementById('infoContent');if(type==='HISTORY'){t.textContent='🕒 HISTORY';var h='';for(var i=history.length-1;i>=0;i--){h+='<div><span>'+(history[i].role==='user'?'🧑':'🤖')+':</span> '+history[i].content.substring(0,100)+'</div>';}c.innerHTML=h||'No history yet.';}else if(type==='MEMORY'){var mem=performance?.memory;t.textContent='🧠 MEMORY';c.innerHTML='<div>JS Heap: <span>'+(mem?Math.round(mem.usedJSHeapSize/1048576):'N/A')+' MB</span></div><div>History: <span>'+history.length+'</span></div><div>Contacts: <span>'+contacts.length+'</span></div>';}else if(type==='USER'){t.textContent='👤 USER';c.innerHTML='<div>🔑 API: <span>'+(cfg.key?'✅':'❌')+'</span></div><div>🎙️ Voice: <span>'+(localStorage.getItem('11labs_key')?'ElevenLabs':'Browser TTS')+'</span></div><div>📇 Contacts: <span>'+contacts.length+'</span></div><div>💬 Messages: <span>'+history.length+'</span></div>';}document.getElementById('infoPanel').classList.add('open');}
+function showPanel(type){
+  var t=document.getElementById('infoTitle'),c=document.getElementById('infoContent');
+  if(type==='HISTORY'){t.textContent='🕒 HISTORY';var h='';for(var i=history.length-1;i>=0;i--){h+='<div><span>'+(history[i].role==='user'?'🧑':'🤖')+':</span> '+history[i].content.substring(0,100)+'</div>';}c.innerHTML=h||'No history yet.';}
+  else if(type==='MEMORY'){var mem=performance?.memory;t.textContent='🧠 MEMORY';c.innerHTML='<div>JS Heap: <span>'+(mem?Math.round(mem.usedJSHeapSize/1048576):'N/A')+' MB</span></div><div>History: <span>'+history.length+'</span></div><div>Contacts: <span>'+contacts.length+'</span></div>';}
+  else if(type==='USER'){t.textContent='👤 USER';c.innerHTML='<div>🔑 API: <span>'+(cfg.key?'✅':'❌')+'</span></div><div>📰 News: <span>'+(localStorage.getItem('s_news_key')?'✅ GNews':'DDG Free')+'</span></div><div>🎙️ Voice: <span>'+(localStorage.getItem('11labs_key')?'ElevenLabs':'Browser TTS')+'</span></div>';}
+  document.getElementById('infoPanel').classList.add('open');
+}
 
-// ═══════════════ MODELS ═══════════════
 var ALL_MODELS=[{id:"openai/gpt-oss-120b:free",name:"GPT-OSS 120B"},{id:"nousresearch/hermes-3-llama-3.1-405b:free",name:"Hermes 3 405B"},{id:"google/gemma-4-26b-a4b:free",name:"Gemma 4 26B"},{id:"meta-llama/llama-3.3-70b-instruct:free",name:"Llama 3.3 70B"},{id:"qwen/qwen3-next-80b-a3b-instruct:free",name:"Qwen3 Next 80B"}];
 function populateModelSelect(){var s=document.getElementById('api-model');s.innerHTML=ALL_MODELS.map(function(m){return'<option value="'+m.id+'">'+m.name+'</option>';}).join('');s.value=localStorage.getItem('s_model')||'openai/gpt-oss-120b:free';}
 
-// ═══════════════ NETVIZ ═══════════════
 (function(){var nv=document.getElementById('netviz-canvas'),nctx=nv.getContext('2d');var nvn=[];function initNV(){nv.width=nv.offsetWidth;nv.height=nv.offsetHeight;var cx=nv.width/2,cy=nv.height/2;nvn=[{x:cx,y:cy,r:5}];for(var i=0;i<12;i++){var a=(i/12)*Math.PI*2;nvn.push({x:cx+Math.cos(a)*40,y:cy+Math.sin(a)*40,r:2+Math.random()*3,color:i%3===0?'#00e5ff':i%3===1?'#ff4444':'#00ff88',sp:0.5+Math.random()});}}
 function drawNV(){nv.width=nv.offsetWidth;nv.height=nv.offsetHeight;nctx.clearRect(0,0,nv.width,nv.height);var t=Date.now()*0.001;nvn.forEach(function(n,i){if(i>0){var a=(i/12)*Math.PI*2+t*n.sp;n.x=nv.width/2+Math.cos(a)*40;n.y=nv.height/2+Math.sin(a)*40;}var p=Math.sin(t*3+i)*0.5+0.5;nctx.beginPath();nctx.arc(n.x,n.y,n.r+p*2,0,Math.PI*2);nctx.fillStyle=n.color;nctx.shadowBlur=10+p*20;nctx.shadowColor=n.color;nctx.fill();nctx.shadowBlur=0;});requestAnimationFrame(drawNV);}
 setTimeout(function(){initNV();drawNV();},200);})();
 
-// ═══════════════ CAMERA ═══════════════
 var camOn=false,cs=null;
 function toggleCamera(){var v=document.getElementById('cam-video'),p=document.getElementById('cam-placeholder'),b=document.getElementById('camToggleBtn');if(camOn){if(cs){cs.getTracks().forEach(function(t){t.stop();});cs=null;}v.style.display='none';p.style.display='flex';b.style.color='';camOn=false;}else{try{navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(function(stream){cs=stream;v.srcObject=cs;v.style.display='block';p.style.display='none';b.style.color='var(--red)';camOn=true;});}catch(e){setResponse('Camera denied.');}}}
 function captureAndAsk(){var v=document.getElementById('cam-video');if(!camOn){toggleCamera();if(!camOn)return;setTimeout(function(){captureAndAsk();},1000);return;}var vk=localStorage.getItem('s_vision_key')||'';if(!vk){setResponse('Vision key needed.');return;}setResponse('Analyzing...');var c=document.createElement('canvas');c.width=v.videoWidth||320;c.height=v.videoHeight||240;c.getContext('2d').drawImage(v,0,0,c.width,c.height);var b64=c.toDataURL('image/jpeg',0.8).split(',')[1];try{fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+vk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:'Describe in Hindi.'},{inline_data:{mime_type:'image/jpeg',data:b64}}]}]})}).then(function(r){return r.json();}).then(function(d){var txt=cleanText(d.candidates?.[0]?.content?.parts?.[0]?.text||'Cannot analyze.');setResponse(txt);speakClean(txt);});}catch(e){setResponse('Vision error.');}}
 
-// ═══════════════ HELPERS ═══════════════
 function setUCmd(t){document.getElementById('ucmd-bubble').textContent=t;}
 function setResponse(t){document.getElementById('sr-bubble').textContent=t;}
 function setTranscribing(t){document.getElementById('trans-bubble').textContent=t;}
 function showThinking(o){document.getElementById('think-dots').classList.toggle('visible',o);document.getElementById('sr-dot').classList.toggle('speaking',o);}
 function cleanText(t){return t.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').replace(/[\u{2600}-\u{27BF}]/gu,'').replace(/[*_~`#@!$%^&(){}\[\]<>|\\\/+=]/g,'').replace(/\s+/g,' ').trim();}
 
-// ═══════════════ SPEAK ═══════════════
 var isSpeaking=false;
 function speakClean(text){
   var clean=cleanText(text);if(!clean)return;
   var use11=localStorage.getItem('use_11labs')==='on',key11=localStorage.getItem('11labs_key')||'',voice11=localStorage.getItem('11labs_voice')||'21m00Tcm4TlvDq8ikWAM';
   var wl=listening;if(wl){stopVoice();isSpeaking=true;}
   document.getElementById('tbMic').classList.add('muted');document.getElementById('statusDot').textContent='🔊 SPEAKING';
-  if(use11&&key11){
-    try{fetch('https://api.elevenlabs.io/v1/text-to-speech/'+voice11,{method:'POST',headers:{'Content-Type':'application/json','xi-api-key':key11},body:JSON.stringify({text:clean,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.5,similarity_boost:0.8}})}).then(function(r){if(r.ok)return r.blob();else fallbackTTS(clean,wl);}).then(function(blob){if(blob){var audio=new Audio(URL.createObjectURL(blob));audio.onended=function(){isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');document.getElementById('statusDot').textContent='● ACTIVE';if(wl)setTimeout(function(){if(!listening)startVoice();},2000);};audio.play();}});}catch(e){fallbackTTS(clean,wl);}
-  }else fallbackTTS(clean,wl);
+  if(use11&&key11){try{fetch('https://api.elevenlabs.io/v1/text-to-speech/'+voice11,{method:'POST',headers:{'Content-Type':'application/json','xi-api-key':key11},body:JSON.stringify({text:clean,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.5,similarity_boost:0.8}})}).then(function(r){if(r.ok)return r.blob();else fallbackTTS(clean,wl);}).then(function(blob){if(blob){var audio=new Audio(URL.createObjectURL(blob));audio.onended=function(){isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');document.getElementById('statusDot').textContent='● ACTIVE';if(wl)setTimeout(function(){if(!listening)startVoice();},2000);};audio.play();}});}catch(e){fallbackTTS(clean,wl);}}else fallbackTTS(clean,wl);
 }
 function fallbackTTS(text,wl){if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=0.9;u.onend=function(){isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');document.getElementById('statusDot').textContent='● ACTIVE';if(wl)setTimeout(function(){if(!listening)startVoice();},2000);};u.onerror=function(){isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');if(wl)setTimeout(function(){if(!listening)startVoice();},2000);};window.speechSynthesis.speak(u);}}
 
-// ═══════════════ VOICE ═══════════════
 var listening=false,recognition=null;
 function startVoice(){var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;if(recognition)try{recognition.stop();}catch(e){}recognition=new SR();recognition.lang='hi-IN';recognition.continuous=false;recognition.onstart=function(){listening=true;document.getElementById('tbMic').classList.add('active');};recognition.onresult=function(e){var t=e.results[0][0].transcript.trim();if(t&&!isProcessing&&!isSpeaking)sendCmd(t);};recognition.onerror=function(){listening=false;document.getElementById('tbMic').classList.remove('active','muted');if(!isSpeaking)setTimeout(function(){if(!listening)startVoice();},2000);};recognition.onend=function(){listening=false;document.getElementById('tbMic').classList.remove('active','muted');if(!isSpeaking)setTimeout(function(){if(!listening)startVoice();},1000);};try{recognition.start();}catch(e){}}
 function stopVoice(){if(recognition){try{recognition.stop();}catch(e){}recognition=null;}listening=false;document.getElementById('tbMic').classList.remove('active','muted');}
 function toggleVoice(){listening?stopVoice():startVoice();}
 
-// ═══════════════ COMMANDS ═══════════════
 var isProcessing=false,history=[];
-function sendCmd(cmd){try{cmd=cmd||document.getElementById('cmd-input').value.trim();}catch(e){return;}if(!cmd||isProcessing)return;try{document.getElementById('cmd-input').value='';}catch(e){}isProcessing=true;setUCmd(cmd);showThinking(true);setResponse('');try{process(cmd).then(function(r){showThinking(false);setResponse(r);setTranscribing(r);isProcessing=false;});}catch(e){showThinking(false);setResponse('Error: '+e.message);isProcessing=false;}}
+function sendCmd(cmd){try{cmd=cmd||document.getElementById('cmd-input').value.trim();}catch(e){return;}if(!cmd||isProcessing)return;try{document.getElementById('cmd-input').value='';}catch(e){}isProcessing=true;setUCmd(cmd);showThinking(true);setResponse('');process(cmd).then(function(r){showThinking(false);setResponse(r);setTranscribing(r);isProcessing=false;});}
 document.getElementById('cmd-send').addEventListener('click',function(e){e.preventDefault();sendCmd();});
 
-function process(msg){
-  var c=msg.toLowerCase().trim();
+function process(msg){var c=msg.toLowerCase().trim();
   if(/time|samay/.test(c))return Promise.resolve('Time: '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
   if(/date|tarikh/.test(c))return Promise.resolve('Date: '+new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}));
   if(/youtube.*play|youtube.*chalao|youtube.*gana|play.*youtube/.test(c)){var q=c.replace(/youtube|play|chalao|gana|video|song|on|par|pe|ko|kholo/gi,'').trim()||'music';openUrl('https://www.youtube.com/results?search_query='+encodeURIComponent(q));return Promise.resolve('▶️ YouTube: '+q);}
@@ -366,17 +355,14 @@ function process(msg){
   if(/settings|config|admin/.test(c)){openSettings();return Promise.resolve('⚙️ Settings opened');}
   if(/upload|file/.test(c)){openFileUpload();return Promise.resolve('📂 Upload opened');}
   if(/news|headlines|khabar/.test(c)){fetchNews();return Promise.resolve('📰 News refreshed');}
-  if(/hello|hi|hey|namaste/.test(c))return Promise.resolve('Namaste! Main STONIC hoon. Bolo kya karna hai?');
+  if(/hello|hi|hey|namaste/.test(c))return Promise.resolve('Namaste! Main STONIC hoon.');
   if(!cfg.key)return Promise.resolve('No API key. Settings mein add karein.');
   return callAI(msg);
 }
 
-function callAI(msg){
-  history.push({role:'user',content:msg});if(history.length>50)history=history.slice(-50);
-  return fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key,'HTTP-Referer':window.location.href},body:JSON.stringify({model:cfg.model,max_tokens:300,messages:[{role:'system',content:'You are STONIC. Reply in Hindi/English. NO emojis. Help with phone tasks.'}].concat(history)})}).then(function(r){if(!r.ok)throw new Error('API '+r.status);return r.json();}).then(function(d){var raw=d.choices?.[0]?.message?.content||'No response';var cl=cleanText(raw);history.push({role:'assistant',content:cl});if(history.length>50)history=history.slice(-50);speakClean(cl);return cl;});
-}
+function callAI(msg){history.push({role:'user',content:msg});if(history.length>50)history=history.slice(-50);return fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key,'HTTP-Referer':window.location.href},body:JSON.stringify({model:cfg.model,max_tokens:300,messages:[{role:'system',content:'You are STONIC. Reply in Hindi/English. NO emojis.'}].concat(history)})}).then(function(r){if(!r.ok)throw new Error('API '+r.status);return r.json();}).then(function(d){var raw=d.choices?.[0]?.message?.content||'No response';var cl=cleanText(raw);history.push({role:'assistant',content:cl});if(history.length>50)history=history.slice(-50);speakClean(cl);return cl;});}
 
-populateModelSelect();setResponse('STONIC v3.0 — Arc Reactor Online.');setTimeout(function(){startVoice();},1500);
+populateModelSelect();setResponse('STONIC v3.0 — News Ready.');setTimeout(function(){startVoice();},1500);
 </script>
 </body>
 </html>
