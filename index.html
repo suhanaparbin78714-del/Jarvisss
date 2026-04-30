@@ -3,120 +3,122 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
-<title>STONIC Mobile — Ultimate AI Assistant</title>
+<title>STONIC — AI Assistant</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;600;700;900&display=swap');
 
 :root{
-  --bg:#0b0f14;--panel:#0d1117;--panel2:#111820;--card:#131c26;--card2:#0e1620;
-  --cyan:#00e5ff;--teal:#00bcd4;--green:#00ff88;--red:#ff4444;--orange:#ff6b35;
-  --border:#1e3040;--border2:#0e2030;--text:#c8d8e8;--text-dim:#4a7090;
-  --text-bright:#e8f4ff;
+  --bg:#0b0f14;--panel:#0d1117;--card:#131c26;--card2:#0e1620;
+  --cyan:#00e5ff;--teal:#00bcd4;--green:#00ff88;--red:#ff4444;
+  --border:#1e3040;--text:#c8d8e8;--text-dim:#4a7090;--text-bright:#e8f4ff;
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{
-  height:100%;overflow-x:hidden;overflow-y:auto;
-  background:var(--bg);color:var(--text);
-  font-family:'JetBrains Mono',monospace;font-size:11px;
-  -webkit-tap-highlight-color:transparent;user-select:none;
-}
-
-#matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.08;}
-
-#titlebar{position:sticky;top:0;z-index:200;height:38px;display:flex;align-items:center;gap:8px;padding:0 10px;background:#080d12;border-bottom:1px solid var(--border2);}
-.tb-icon{width:20px;height:20px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 15px var(--cyan),0 0 30px var(--teal);animation:arcPulse 2s infinite;display:flex;align-items:center;justify-content:center;font-size:10px;}
-@keyframes arcPulse{0%,100%{box-shadow:0 0 10px var(--cyan),0 0 20px var(--teal)}50%{box-shadow:0 0 30px var(--cyan),0 0 60px var(--teal)}}
-.tb-logo{font-family:'Orbitron',monospace;font-weight:700;font-size:12px;color:var(--text-bright);letter-spacing:2px;text-shadow:0 0 20px var(--cyan),0 0 40px var(--teal);}
-.tb-mic{background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:4px;}
-.tb-mic.active{color:var(--red);text-shadow:0 0 15px var(--red);animation:micPulse 0.8s infinite}
-.tb-mic.muted{color:var(--orange);}
-@keyframes micPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-.tb-gear{background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:4px;}
-
+html,body{height:100%;overflow-x:hidden;overflow-y:auto;background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;-webkit-tap-highlight-color:transparent;user-select:none}
+#matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.06}
 #app{display:flex;flex-direction:column;padding:6px;gap:6px;max-width:420px;margin:0 auto;position:relative;z-index:10}
 
-#left{display:flex;gap:6px;background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:6px;}
-#cam-box{width:90px;flex-shrink:0;border-radius:6px;border:1px solid var(--border);background:#080c10;overflow:hidden;position:relative;aspect-ratio:4/3;}
+/* Titlebar */
+#tb{position:sticky;top:0;z-index:200;height:38px;display:flex;align-items:center;gap:8px;padding:0 10px;background:#080d12;border-bottom:1px solid var(--border)}
+.tb-icon{width:20px;height:20px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 15px var(--cyan);animation:arcPulse 2s infinite;display:flex;align-items:center;justify-content:center;font-size:10px}
+@keyframes arcPulse{0%,100%{box-shadow:0 0 10px var(--cyan)}50%{box-shadow:0 0 25px var(--cyan),0 0 40px var(--teal)}}
+.tb-logo{font-family:'Orbitron',monospace;font-weight:700;font-size:12px;color:var(--text-bright);letter-spacing:2px;text-shadow:0 0 15px var(--cyan)}
+.tb-mic{background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:4px}
+.tb-mic.active{color:var(--red);text-shadow:0 0 10px var(--red);animation:micPulse 0.8s infinite}
+.tb-mic.muted{color:var(--orange)}
+@keyframes micPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.tb-gear{background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer;padding:4px}
+
+/* Left Panel */
+#left{display:flex;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px}
+#cam-box{width:90px;flex-shrink:0;border-radius:6px;border:1px solid var(--border);background:#080c10;overflow:hidden;position:relative;aspect-ratio:4/3}
 #cam-video{width:100%;height:100%;object-fit:cover;display:none}
-#cam-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:linear-gradient(180deg,#0a1018,#050810);}
-.cam-corner{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.7);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;color:var(--text-dim);}
-.cam-ask-btn{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.7);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;color:var(--cyan);}
-#dsktp-box{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
-.dsktp-header{font-family:'Orbitron',monospace;color:var(--cyan);font-size:9px;display:flex;justify-content:space-between;}
-.dsktp-news{flex:1;overflow-y:auto;margin-top:4px;max-height:60px;scrollbar-width:none;}
+#cam-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:linear-gradient(180deg,#0a1018,#050810)}
+.cam-corner{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.7);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;color:var(--text-dim)}
+.cam-ask-btn{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.7);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;color:var(--cyan)}
+#dsktp-box{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.dsktp-header{font-family:'Orbitron',monospace;color:var(--cyan);font-size:9px;display:flex;justify-content:space-between}
+.dsktp-news{flex:1;overflow-y:auto;margin-top:4px;max-height:55px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .dsktp-news::-webkit-scrollbar{display:none}
-.news-line{color:var(--text);font-size:7.5px;line-height:1.7;padding:1px 0;animation:newsIn 0.4s ease;border-bottom:1px solid rgba(255,255,255,0.03);white-space:normal;word-wrap:break-word;}
-@keyframes newsIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
-.news-counter{font-size:7px;color:var(--text-dim);}
-.news-refresh-btn{background:none;border:1px solid var(--border);color:var(--cyan);font-size:7px;cursor:pointer;padding:2px 6px;border-radius:4px;}
+.news-line{color:var(--text);font-size:7.5px;line-height:1.7;padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.03);white-space:normal;word-wrap:break-word}
+.news-counter{font-size:7px;color:var(--text-dim)}
+.news-refresh-btn{background:none;border:1px solid var(--border);color:var(--cyan);font-size:7px;cursor:pointer;padding:2px 6px;border-radius:4px}
 
+/* Center */
 #center{display:flex;flex-direction:column;gap:6px}
+.arc-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:15px;text-align:center;position:relative;overflow:hidden}
+.arc-reactor{width:50px;height:50px;border-radius:50%;margin:0 auto;border:3px solid var(--cyan);box-shadow:0 0 20px var(--cyan);animation:reactorSpin 4s linear infinite;display:flex;align-items:center;justify-content:center}
+@keyframes reactorSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.arc-core{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle,#fff 0%,var(--cyan) 50%,var(--teal) 100%);box-shadow:0 0 30px var(--cyan);animation:corePulse 1.5s ease-in-out infinite}
+@keyframes corePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.arc-label{font-size:7px;color:var(--cyan);margin-top:6px;letter-spacing:2px}
+
+.app-popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1000;background:rgba(0,0,0,0.95);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;box-shadow:0 0 50px rgba(0,229,255,0.4)}
+.app-popup.show{display:block}
+.app-popup-icon{font-size:40px;margin-bottom:8px}
+.app-popup-text{color:var(--cyan);font-size:12px}
+.app-popup-sub{color:var(--text-dim);font-size:9px}
+
 #quickactions-row{display:flex;gap:4px;flex-wrap:wrap}
-.qa-chip{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:7px;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:3px;transition:all .3s;white-space:nowrap;}
-.qa-chip:active{border-color:var(--cyan);background:rgba(0,229,255,0.1);box-shadow:0 0 20px rgba(0,229,255,0.3);}
-.qa-dot-sm{width:5px;height:5px;border-radius:50%;}
-.qa-dot-sm.blue{background:#0096ff;box-shadow:0 0 6px #0096ff}
-.qa-dot-sm.red{background:#ff4444;box-shadow:0 0 6px #ff4444}
-.qa-dot-sm.teal{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
-.qa-dot-sm.gray{background:#7890a0}
+.qa-chip{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:7px;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.qa-chip:active{background:rgba(0,229,255,0.1);border-color:var(--cyan)}
+.qa-dot-sm{width:5px;height:5px;border-radius:50%}
+.qa-dot-sm.blue{background:#0096ff}.qa-dot-sm.red{background:#ff4444}.qa-dot-sm.teal{background:var(--cyan)}.qa-dot-sm.gray{background:#7890a0}
 
-#netviz{background:var(--card);border:1px solid var(--border);border-radius:8px;height:100px;overflow:hidden;}
-#netviz-canvas{width:100%;height:100%;}
+#netviz{background:var(--card);border:1px solid var(--border);border-radius:8px;height:100px;overflow:hidden}
+#netviz-canvas{width:100%;height:100%}
 
-#visual-hub{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
-.vh-badge{display:inline-block;background:rgba(0,229,255,0.15);border:1px solid rgba(0,229,255,0.3);border-radius:4px;padding:2px 8px;font-size:8px;color:var(--cyan);font-weight:600;animation:badgeGlow 3s infinite;}
-@keyframes badgeGlow{0%,100%{box-shadow:0 0 5px rgba(0,229,255,0.2)}50%{box-shadow:0 0 20px rgba(0,229,255,0.6)}}
+#visual-hub{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.vh-badge{display:inline-block;background:rgba(0,229,255,0.15);border:1px solid rgba(0,229,255,0.3);border-radius:4px;padding:2px 8px;font-size:8px;color:var(--cyan);font-weight:600}
 .vh-layers{font-size:22px;opacity:.3;animation:float 4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .vh-title{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:var(--text-bright);margin:4px 0}
-.vh-status{font-size:7px;color:var(--cyan);animation:blink-text 2s infinite}
-@keyframes blink-text{0%,100%{opacity:1}50%{opacity:.3}}
+.vh-status{font-size:7px;color:var(--cyan)}
 
-#right{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:8px;}
+/* Right Panel */
+#right{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px}
 #trans-title{font-family:'Orbitron',monospace;font-size:9px;color:var(--cyan)}
-.ucmd-bubble,.sr-bubble,.trans-bubble{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.5;min-height:24px;color:var(--text);}
-.sr-bubble{animation:textGlow 2s ease-in-out infinite;}
-@keyframes textGlow{0%,100%{border-color:var(--border)}50%{border-color:rgba(0,229,255,0.4);box-shadow:0 0 15px rgba(0,229,255,0.15)}}
+.bubble{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.5;min-height:24px;color:var(--text)}
+.sr-bubble{color:var(--text);min-height:32px}
 .think-dots{display:none;align-items:center;gap:2px}
 .think-dots.visible{display:flex}
 .think-dot{width:4px;height:4px;border-radius:50%;background:var(--cyan);animation:think 1.2s infinite}
-@keyframes think{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1.5);opacity:1;box-shadow:0 0 15px var(--cyan)}}
+.think-dot:nth-child(2){animation-delay:.2s}.think-dot:nth-child(3){animation-delay:.4s}
+@keyframes think{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1.5);opacity:1}}
 .sr-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#ff9944;margin-right:4px}
 .sr-dot.speaking{background:var(--green);animation:pulse .4s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.6);box-shadow:0 0 15px var(--green)}}
-#cmd-row{display:flex;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;}
-#cmd-input{flex:1;background:none;border:none;color:var(--text-bright);font-size:10px;outline:none;caret-color:var(--cyan);}
-#cmd-send{background:none;border:none;color:var(--text-dim);font-size:14px;cursor:pointer;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+#cmd-row{display:flex;gap:6px;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
+#cmd-input{flex:1;background:none;border:none;color:var(--text-bright);font-size:10px;outline:none;caret-color:var(--cyan)}
+#cmd-send{background:none;border:none;color:var(--text-dim);font-size:14px;cursor:pointer}
 
+/* Modals */
 .modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:16px}
 .modal.open{display:flex}
-.modal-box{background:#0d1520;border:1px solid rgba(0,229,255,.4);box-shadow:0 0 60px rgba(0,229,255,0.2);width:100%;max-width:380px;border-radius:10px;max-height:85vh;overflow-y:auto;animation:modalIn 0.3s ease;}
-@keyframes modalIn{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-box{background:#0d1520;border:1px solid rgba(0,229,255,.4);width:100%;max-width:360px;border-radius:10px;max-height:85vh;overflow-y:auto}
 .modal-hdr{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:#081018}
 .modal-body{padding:14px;display:flex;flex-direction:column;gap:10px}
 .sf{display:flex;flex-direction:column;gap:4px}
 .sf label{font-size:8px;color:var(--text-dim)}
-.sf input,.sf select,.sf textarea{background:#081018;border:1px solid var(--border);color:var(--text-bright);font-size:10px;padding:7px 10px;border-radius:6px;outline:none;width:100%;resize:vertical;font-family:'JetBrains Mono',monospace;}
-.btn-save{width:100%;padding:10px;border-radius:6px;background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(0,188,212,.1));border:1px solid rgba(0,229,255,.5);color:var(--cyan);font-size:10px;cursor:pointer;}
-.file-drop-area{border:2px dashed var(--cyan);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .3s;}
-.file-drop-area.has-file{border-color:var(--green);background:rgba(0,255,136,0.05);}
-.file-name{font-size:8px;color:var(--green);margin-top:4px;word-break:break-all;}
-.panel-content{color:var(--text);font-size:10px;line-height:1.8;}
-.panel-content span{color:var(--cyan);}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;background:rgba(0,229,255,0.05);padding:8px 10px;border-radius:6px;border:1px solid var(--border);}
-.tgl{position:relative;width:36px;height:18px;cursor:pointer;}
-.tgl input{opacity:0;position:absolute;width:100%;height:100%;z-index:2;}
-.tgl-track{position:absolute;inset:0;border-radius:9px;background:#1a2a3a;border:1px solid var(--border);}
-.tgl-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--text-dim);transition:.3s;}
-.tgl input:checked~.tgl-track{background:rgba(0,229,255,.2);border-color:var(--cyan);}
-.tgl input:checked~.tgl-thumb{left:20px;background:var(--cyan);}
+.sf input,.sf select,.sf textarea{background:#081018;border:1px solid var(--border);color:var(--text-bright);font-size:10px;padding:7px 10px;border-radius:6px;outline:none;width:100%}
+.btn-save{width:100%;padding:10px;border-radius:6px;background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(0,188,212,.1));border:1px solid rgba(0,229,255,.5);color:var(--cyan);font-size:10px;cursor:pointer}
+.file-drop-area{border:2px dashed var(--cyan);border-radius:10px;padding:20px;text-align:center;cursor:pointer}
+.file-drop-area.has-file{border-color:var(--green);background:rgba(0,255,136,0.05)}
+.file-name{font-size:8px;color:var(--green);margin-top:4px}
+.panel-content{color:var(--text);font-size:10px;line-height:1.8}
+.panel-content span{color:var(--cyan)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;background:rgba(0,229,255,0.05);padding:8px 10px;border-radius:6px;border:1px solid var(--border)}
+.tgl{position:relative;width:36px;height:18px;cursor:pointer}
+.tgl input{opacity:0;position:absolute;width:100%;height:100%;z-index:2}
+.tgl-track{position:absolute;inset:0;border-radius:9px;background:#1a2a3a;border:1px solid var(--border)}
+.tgl-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--text-dim);transition:.3s}
+.tgl input:checked~.tgl-track{background:rgba(0,229,255,.2);border-color:var(--cyan)}
+.tgl input:checked~.tgl-thumb{left:20px;background:var(--cyan)}
 </style>
 </head>
 <body>
 <canvas id="matrix-bg"></canvas>
 
-<div id="titlebar">
+<div id="tb">
   <div class="tb-icon">🔷</div><div class="tb-logo">STONIC</div>
   <button class="tb-mic" id="tbMic" onclick="toggleVoice()">🎤</button>
   <button class="tb-gear" onclick="openSettings()">⚙</button>
@@ -131,193 +133,186 @@ html,body{
       <button class="cam-ask-btn" onclick="captureAndAsk()">👁️</button>
     </div>
     <div id="dsktp-box">
-      <div class="dsktp-header"><span>STONIC_DSKTP</span><span style="font-size:7px;color:var(--text-dim)">v2.5</span></div>
+      <div class="dsktp-header"><span>STONIC_DSKTP</span><span style="font-size:7px;color:var(--text-dim)">v3.0</span></div>
       <div class="dsktp-news" id="dsktpNews"><div class="news-line">⚡ Loading news...</div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:2px;">
-        <span class="news-counter" id="newsCounter">-</span>
-        <button class="news-refresh-btn" onclick="fetchNews()">↻ REFRESH</button>
-      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:2px"><span class="news-counter" id="newsCounter">-</span><button class="news-refresh-btn" onclick="fetchNews()">↻</button></div>
     </div>
   </div>
 
   <div id="center">
+    <div class="arc-box"><div class="arc-reactor"><div class="arc-core"></div></div><div class="arc-label">SYSTEM ACTIVE</div></div>
     <div id="quickactions-row">
-      <div class="qa-chip" onclick="openFileUpload()"><span class="qa-dot-sm blue"></span>📂 UPLOAD</div>
-      <div class="qa-chip" onclick="showPanel('MEMORY')"><span class="qa-dot-sm red"></span>🧠 MEMORY</div>
-      <div class="qa-chip" onclick="showPanel('HISTORY')"><span class="qa-dot-sm teal"></span>🕒 HISTORY</div>
-      <div class="qa-chip" onclick="showPanel('USER')"><span class="qa-dot-sm gray"></span>👤 USER</div>
-      <div class="qa-chip" onclick="executeFeature('weather')"><span class="qa-dot-sm teal"></span>🌤️</div>
-      <div class="qa-chip" onclick="executeFeature('translate')"><span class="qa-dot-sm blue"></span>🌐</div>
-      <div class="qa-chip" onclick="executeFeature('quote')"><span class="qa-dot-sm red"></span>💬</div>
-      <div class="qa-chip" onclick="executeFeature('joke')"><span class="qa-dot-sm teal"></span>😂</div>
-      <div class="qa-chip" onclick="executeFeature('code')"><span class="qa-dot-sm blue"></span>💻</div>
-      <div class="qa-chip" onclick="executeFeature('reminder')"><span class="qa-dot-sm red"></span>⏰</div>
+      <div class="qa-chip" onclick="openFileUpload()"><span class="qa-dot-sm blue"></span>📂UPLOAD</div>
+      <div class="qa-chip" onclick="showPanel('MEMORY')"><span class="qa-dot-sm red"></span>🧠MEMORY</div>
+      <div class="qa-chip" onclick="showPanel('HISTORY')"><span class="qa-dot-sm teal"></span>🕒HISTORY</div>
+      <div class="qa-chip" onclick="showPanel('USER')"><span class="qa-dot-sm gray"></span>👤USER</div>
+      <div class="qa-chip" onclick="launchApp('youtube')"><span class="qa-dot-sm red"></span>▶️</div>
+      <div class="qa-chip" onclick="launchApp('whatsapp')"><span class="qa-dot-sm teal"></span>💬</div>
+      <div class="qa-chip" onclick="launchApp('call')"><span class="qa-dot-sm blue"></span>📞</div>
+      <div class="qa-chip" onclick="launchApp('music')"><span class="qa-dot-sm red"></span>🎵</div>
+      <div class="qa-chip" onclick="launchApp('map')"><span class="qa-dot-sm teal"></span>📍</div>
+      <div class="qa-chip" onclick="launchApp('alarm')"><span class="qa-dot-sm blue"></span>⏰</div>
     </div>
     <div id="netviz"><canvas id="netviz-canvas"></canvas></div>
-    <div id="visual-hub">
-      <div><span class="vh-badge">VISUAL HUB</span> <span style="font-size:8px;color:var(--text-dim)">READY</span></div>
-      <div class="vh-layers">⊞</div>
-      <div class="vh-title">VISUAL INTELLIGENCE HUB</div>
-      <div style="font-size:8px;color:var(--text-dim)">Images & Flowcharts appear here</div>
-      <div class="vh-status">SYSTEM READY</div>
-    </div>
+    <div id="visual-hub"><div><span class="vh-badge">VISUAL HUB</span> <span style="font-size:8px;color:var(--text-dim)">READY</span></div><div class="vh-layers">⊞</div><div class="vh-title">VISUAL INTELLIGENCE HUB</div><div style="font-size:8px;color:var(--text-dim)">Images & Flowcharts here</div><div class="vh-status">SYSTEM READY</div></div>
   </div>
 
   <div id="right">
     <div><span id="trans-title">TRANSCRIPTION</span></div>
-    <div><div style="font-size:7px;color:var(--text-dim)">USER_CMD</div><div class="ucmd-bubble" id="ucmd-bubble">...</div></div>
-    <div>
-      <div style="font-size:7px;color:#ff9944"><span class="sr-dot" id="sr-dot"></span>STONIC_RESPONSE <span class="think-dots" id="think-dots"><span class="think-dot"></span><span class="think-dot"></span><span class="think-dot"></span></span></div>
-      <div class="sr-bubble" id="sr-bubble">Hello! I am STONIC.</div>
-    </div>
-    <div><div style="font-size:7px;color:var(--text-dim)">TRANSCRIBING...</div><div class="trans-bubble" id="trans-bubble">Ready.</div></div>
-    <div id="cmd-row">
-      <input id="cmd-input" type="text" placeholder="TYPE_COMMAND_HERE..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendCmd();}" autocomplete="off"/>
-      <button id="cmd-send" onclick="sendCmd()">➤</button>
-    </div>
+    <div><div style="font-size:7px;color:var(--text-dim)">USER_CMD</div><div class="bubble" id="ucmd-bubble">...</div></div>
+    <div><div style="font-size:7px;color:#ff9944"><span class="sr-dot" id="sr-dot"></span>STONIC_RESPONSE <span class="think-dots" id="think-dots"><span class="think-dot"></span><span class="think-dot"></span><span class="think-dot"></span></span></div><div class="bubble sr-bubble" id="sr-bubble">Hello! I am STONIC.</div></div>
+    <div><div style="font-size:7px;color:var(--text-dim)">TRANSCRIBING...</div><div class="bubble" id="trans-bubble">Ready.</div></div>
+    <div id="cmd-row"><input id="cmd-input" type="text" placeholder="TYPE OR SPEAK..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendCmd();}" autocomplete="off"/><button id="cmd-send" onclick="sendCmd()">➤</button></div>
     <div style="font-size:7px;color:var(--text-dim)"><span style="color:var(--green)" id="statusDot">● ACTIVE</span></div>
   </div>
 </div>
 
+<!-- APP POPUP -->
+<div class="app-popup" id="appPopup"><div class="app-popup-icon" id="popupIcon">📱</div><div class="app-popup-text" id="popupText">Opening...</div><div class="app-popup-sub" id="popupSub">STONIC</div></div>
+
 <!-- UPLOAD MODAL -->
-<div class="modal" id="uploadModal"><div class="modal-box">
-  <div class="modal-hdr"><span style="color:var(--cyan);">📂 FILE + PROMPT</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('uploadModal')">✕</button></div>
-  <div class="modal-body">
-    <div class="file-drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
-      <div style="font-size:28px;">📤</div><div style="font-size:9px;color:var(--text-dim)">Tap to upload</div>
-      <div class="file-name" id="fileName"></div>
-    </div>
-    <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(this)" accept="*/*"/>
-    <div class="sf"><label>📝 PROMPT</label><textarea id="filePrompt" rows="2" placeholder="e.g. Is photo ko cartoon banao..."></textarea></div>
-    <button class="btn-save" onclick="processFileUpload()">🚀 PROCESS</button>
-  </div>
-</div></div>
+<div class="modal" id="uploadModal"><div class="modal-box"><div class="modal-hdr"><span style="color:var(--cyan)">📂 FILE + PROMPT</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('uploadModal')">✕</button></div><div class="modal-body"><div class="file-drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()"><div style="font-size:28px">📤</div><div style="font-size:9px;color:var(--text-dim)">Tap to upload</div><div class="file-name" id="fileName"></div></div><input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(this)" accept="*/*"/><div class="sf"><label>📝 PROMPT</label><textarea id="filePrompt" rows="2" placeholder="What to do?"></textarea></div><button class="btn-save" onclick="processFileUpload()">🚀 PROCESS</button></div></div></div>
 
 <!-- INFO PANEL -->
-<div class="modal" id="infoPanel"><div class="modal-box">
-  <div class="modal-hdr"><span id="infoTitle" style="color:var(--cyan);">INFO</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('infoPanel')">✕</button></div>
-  <div class="modal-body"><div class="panel-content" id="infoContent"></div></div>
-</div></div>
+<div class="modal" id="infoPanel"><div class="modal-box"><div class="modal-hdr"><span id="infoTitle" style="color:var(--cyan)">INFO</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('infoPanel')">✕</button></div><div class="modal-body"><div class="panel-content" id="infoContent"></div></div></div></div>
 
-<!-- SETTINGS MODAL -->
-<div class="modal" id="settingsModal"><div class="modal-box">
-  <div class="modal-hdr"><span style="color:var(--cyan);">⚙ API CONFIG</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('settingsModal')">✕</button></div>
-  <div class="modal-body">
-    <div class="sf"><label>OpenRouter API Key</label><input type="password" id="api-key"/></div>
-    <div class="sf"><label>Model</label><select id="api-model"></select></div>
-    <div class="sf"><label>Google Gemini (Vision)</label><input type="password" id="vision-key"/></div>
-    <div class="sf"><label>GNews API Key</label><input type="password" id="news-key"/></div>
-    <div class="sf"><label>Google Search API Key</label><input type="password" id="google-key"/></div>
-    <div class="sf"><label>Search Engine ID</label><input type="password" id="google-cx"/></div>
-    <div class="sf"><label>Stability AI (Image Gen)</label><input type="password" id="stability-key"/></div>
-    <div class="sf"><label>OpenWeatherMap API Key</label><input type="password" id="weather-key"/></div>
-    <div class="sf"><label>🎙️ ElevenLabs API Key</label><input type="password" id="elevenlabs-key" placeholder="Enter ElevenLabs API Key"/></div>
-    <div class="sf"><label>🎙️ ElevenLabs Voice ID</label><input type="text" id="voice-id" placeholder="Enter Voice ID (e.g. 21m00Tcm4TlvDq8ikWAM)"/></div>
-    <div class="toggle-row"><span>🎙️ Use ElevenLabs Voice</span><label class="tgl"><input type="checkbox" id="use-11labs" onchange="localStorage.setItem('use_11labs',this.checked?'on':'off')"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
-    <button class="btn-save" onclick="saveSettings()">◈ SAVE ◈</button>
-  </div>
-</div></div>
+<!-- SETTINGS -->
+<div class="modal" id="settingsModal"><div class="modal-box"><div class="modal-hdr"><span style="color:var(--cyan)">⚙ API CONFIG</span><button style="background:none;border:none;color:var(--text-dim);font-size:16px;cursor:pointer" onclick="closeModal('settingsModal')">✕</button></div><div class="modal-body">
+  <div class="sf"><label>OpenRouter API Key</label><input type="password" id="api-key" placeholder="sk-or-v1-..."></div>
+  <div class="sf"><label>Model</label><select id="api-model"></select></div>
+  <div class="sf"><label>Google Gemini Vision Key</label><input type="password" id="vision-key" placeholder="AIza..."></div>
+  <div class="sf"><label>GNews API Key (gnews.io)</label><input type="password" id="news-key" placeholder="Free from gnews.io"></div>
+  <div class="toggle-row"><span>📰 News ON</span><label class="tgl"><input type="checkbox" id="news-toggle" checked onchange="localStorage.setItem('s_news',this.checked?'on':'off')"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+  <div class="sf"><label>Stability AI Key (Image Gen)</label><input type="password" id="stability-key" placeholder="sk-..."></div>
+  <div class="sf"><label>ElevenLabs API Key</label><input type="password" id="elevenlabs-key" placeholder="For custom voice"></div>
+  <div class="sf"><label>ElevenLabs Voice ID</label><input type="text" id="voice-id" placeholder="21m00Tcm4TlvDq8ikWAM"></div>
+  <div class="toggle-row"><span>🎙️ ElevenLabs Voice</span><label class="tgl"><input type="checkbox" id="use-11labs"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+  <button class="btn-save" onclick="saveSettings()">◈ SAVE ◈</button>
+</div></div></div>
 
 <script>
-// ═══════════════ MATRIX ═══════════════
-const mc=document.getElementById('matrix-bg'),mctx=mc.getContext('2d');
-mc.width=window.innerWidth;mc.height=window.innerHeight;
-const chars='アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789';
-const drops=Array(Math.floor(mc.width/15)).fill(1);
-function drawMatrix(){mctx.fillStyle='rgba(0,0,0,0.05)';mctx.fillRect(0,0,mc.width,mc.height);mctx.fillStyle='#0f0';mctx.font='12px monospace';for(let i=0;i<drops.length;i++){const t=chars[Math.floor(Math.random()*chars.length)];mctx.fillText(t,i*15,drops[i]*15);if(drops[i]*15>mc.height&&Math.random()>.975)drops[i]=0;drops[i]++;}}
-setInterval(drawMatrix,50);
+(function(){var c=document.getElementById('matrix-bg'),x=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;var chars='01';var drops=Array(Math.floor(c.width/15)).fill(1);function draw(){x.fillStyle='rgba(0,0,0,0.05)';x.fillRect(0,0,c.width,c.height);x.fillStyle='#0f0';x.font='12px monospace';for(var i=0;i<drops.length;i++){var t=chars[Math.floor(Math.random()*chars.length)];x.fillText(t,i*15,drops[i]*15);if(drops[i]*15>c.height&&Math.random()>.975)drops[i]=0;drops[i]++;}}setInterval(draw,50);window.addEventListener('resize',function(){c.width=window.innerWidth;c.height=window.innerHeight;});})();
 
-// ═══════════════ NEWS ═══════════════
-let newsItems=[],newsIndex=0,newsTimer=null;
-async function fetchNews(){
-  const box=document.getElementById('dsktpNews');box.innerHTML='<div class="news-line">⚡ Fetching...</div>';
-  const nk=localStorage.getItem('s_news_key')||'';
-  let items=[];
-  if(nk){try{const r=await fetch(`https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=in&max=10&apikey=${nk}`);const d=await r.json();if(d.articles)items=d.articles.map(a=>a.title);}catch(e){}}
-  if(!items.length){try{const r=await fetch('https://api.duckduckgo.com/?q=india+news+today&format=json&no_html=1');const d=await r.json();if(d.RelatedTopics)items=d.RelatedTopics.filter(t=>t.Text).map(t=>t.Text.split(' - ')[0].trim());}catch(e){}}
-  if(!items.length)items=['Technology updates today','AI systems operational','Global markets update'];
-  newsItems=items;newsIndex=0;displayNews();startNews();
+function showPopup(icon,text,sub){document.getElementById('popupIcon').textContent=icon;document.getElementById('popupText').textContent=text;document.getElementById('popupSub').textContent=sub;document.getElementById('appPopup').classList.add('show');setTimeout(function(){document.getElementById('appPopup').classList.remove('show');},2000);}
+function launchApp(app){switch(app){case'youtube':openUrl('https://youtube.com');showPopup('▶️','YouTube','Opening...');break;case'whatsapp':openUrl('https://wa.me/');showPopup('💬','WhatsApp','Opening...');break;case'call':openUrl('tel:');showPopup('📞','Dialer','Opening...');break;case'music':openUrl('https://music.youtube.com');showPopup('🎵','Music','Opening...');break;case'map':openUrl('https://maps.google.com');showPopup('📍','Maps','Opening...');break;case'alarm':openUrl('clock:');showPopup('⏰','Clock','Opening...');break;}}
+function openUrl(url){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();document.body.removeChild(a);}
+
+// ═══════════════ NEWS — FIXED FOR GITHUB PAGES ═══════════════
+var newsItems=[],newsIndex=0,newsTimer=null;
+function fetchNews(){
+  var box=document.getElementById('dsktpNews');
+  box.innerHTML='<div class="news-line">⚡ Fetching news...</div>';
+  var nk=localStorage.getItem('s_news_key')||'';
+  var newsOn=localStorage.getItem('s_news')!=='off';
+  
+  function fallbackNews(){
+    var items=['Latest technology updates today','AI systems operational worldwide','Global markets show positive trends','New innovations in renewable energy','Sports highlights this week','Business and finance updates','Entertainment news roundup','Science discoveries today','Health tips and updates','World politics brief'];
+    newsItems=items;newsIndex=0;displayNews();startNews();
+  }
+  
+  function fetchDDG(){
+    var xhr=new XMLHttpRequest();
+    xhr.open('GET','https://api.duckduckgo.com/?q=india+news+today&format=json&no_html=1',true);
+    xhr.onload=function(){
+      if(xhr.status===200){
+        try{
+          var d=JSON.parse(xhr.responseText);
+          var items=[];
+          if(d.RelatedTopics){items=d.RelatedTopics.filter(function(t){return t.Text;}).map(function(t){return t.Text.split(' - ')[0].trim();});}
+          if(d.AbstractText)items.unshift(d.AbstractText);
+          if(items.length>0){newsItems=items.slice(0,15);newsIndex=0;displayNews();startNews();}else{fallbackNews();}
+        }catch(e){fallbackNews();}
+      }else{fallbackNews();}
+    };
+    xhr.onerror=function(){fallbackNews();};
+    xhr.send();
+  }
+  
+  if(nk&&newsOn){
+    var xhr=new XMLHttpRequest();
+    xhr.open('GET','https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=in&max=10&apikey='+nk,true);
+    xhr.onload=function(){
+      if(xhr.status===200){
+        try{
+          var d=JSON.parse(xhr.responseText);
+          if(d.articles&&d.articles.length>0){newsItems=d.articles.map(function(a){return a.title;});newsIndex=0;displayNews();startNews();}else{fetchDDG();}
+        }catch(e){fetchDDG();}
+      }else{fetchDDG();}
+    };
+    xhr.onerror=function(){fetchDDG();};
+    xhr.send();
+  }else{fetchDDG();}
 }
-function displayNews(){const box=document.getElementById('dsktpNews');let h='';for(let i=0;i<3;i++)h+=`<div class="news-line">⚡ ${newsItems[(newsIndex+i)%newsItems.length]}</div>`;box.innerHTML=h;document.getElementById('newsCounter').textContent=`${newsIndex+1}-${Math.min(newsIndex+3,newsItems.length)}/${newsItems.length}`;}
-function advanceNews(){newsIndex=(newsIndex+1)%newsItems.length;displayNews();startNews();}
+
+function displayNews(){
+  var box=document.getElementById('dsktpNews');
+  var h='';
+  if(newsItems.length===0){box.innerHTML='<div class="news-line">⚡ No news</div>';return;}
+  for(var i=0;i<3;i++){h+='<div class="news-line">⚡ '+newsItems[(newsIndex+i)%newsItems.length]+'</div>';}
+  box.innerHTML=h;
+  document.getElementById('newsCounter').textContent=(newsIndex+1)+'-'+Math.min(newsIndex+3,newsItems.length)+'/'+newsItems.length;
+}
+function advanceNews(){if(newsItems.length===0)return;newsIndex=(newsIndex+1)%newsItems.length;displayNews();startNews();}
 function startNews(){if(newsTimer)clearInterval(newsTimer);newsTimer=setInterval(advanceNews,10000);}
-function readCurrentNews(){if(!newsItems.length)return;let c=[];for(let i=0;i<3;i++)c.push(newsItems[(newsIndex+i)%newsItems.length]);speakClean('Current news. '+c.join('. '));}
-fetchNews();
+document.getElementById('dsktpNews').addEventListener('click',advanceNews);
+setTimeout(function(){fetchNews();},500);
+
+// ═══════════════ CONTACTS ═══════════════
+var contacts=JSON.parse(localStorage.getItem('stonic_contacts')||'[]');
+function findContact(name){var n=name.toLowerCase().trim();for(var i=0;i<contacts.length;i++){if(contacts[i].name.toLowerCase().includes(n)||n.includes(contacts[i].name.toLowerCase()))return contacts[i];}return null;}
 
 // ═══════════════ FILE UPLOAD ═══════════════
-let uploadedFile=null;
+var uploadedFile=null;
 function openFileUpload(){document.getElementById('uploadModal').classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function handleFileSelect(input){const f=input.files[0];if(!f)return;uploadedFile=f;document.getElementById('fileName').textContent='✅ '+f.name;document.getElementById('dropArea').classList.add('has-file');}
-async function processFileUpload(){
+function handleFileSelect(input){var f=input.files[0];if(!f)return;uploadedFile=f;document.getElementById('fileName').textContent='✅ '+f.name;document.getElementById('dropArea').classList.add('has-file');}
+function processFileUpload(){
   if(!uploadedFile){setResponse('Select a file first.');return;}
-  const prompt=document.getElementById('filePrompt').value.trim()||'Describe this file';
+  var prompt=document.getElementById('filePrompt').value.trim()||'Describe this file';
   closeModal('uploadModal');setUCmd('[FILE] '+prompt);setResponse('Processing...');
-  if(uploadedFile.type.startsWith('image/')){
-    const reader=new FileReader();
-    reader.onload=async function(e){
-      const img=e.target.result;document.getElementById('vh-body').innerHTML=`<img src="${img}" style="max-width:100%;max-height:200px;border-radius:8px;"/>`;
-      const vk=localStorage.getItem('s_vision_key')||'';
-      if(vk){const b64=img.split(',')[1];try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${vk}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:uploadedFile.type,data:b64}}]}]})});const d=await r.json();const txt=cleanText(d.candidates?.[0]?.content?.parts?.[0]?.text||'Cannot analyze.');setResponse(txt);speakClean(txt);}catch(e){setResponse('Vision error.');}}
-      else{const reply=await callAI('Image uploaded. Prompt: '+prompt);setResponse(reply);}
-    };reader.readAsDataURL(uploadedFile);
-  }else if(uploadedFile.type.startsWith('text/')||uploadedFile.name.match(/\.(json|js|py|html|css|txt)$/)){
-    const reader=new FileReader();
-    reader.onload=async function(e){const reply=await callAI('File: '+e.target.result.substring(0,2000)+'\nPrompt: '+prompt);setResponse(reply);speakClean(reply);};
-    reader.readAsText(uploadedFile);
-  }else{setResponse('Type: '+uploadedFile.type+'. Prompt: '+prompt);}
+  if(uploadedFile.type.startsWith('image/')){var reader=new FileReader();reader.onload=function(e){var img=e.target.result;try{document.getElementById('vh-body').innerHTML='<img src="'+img+'" style="max-width:100%;max-height:200px;border-radius:8px;">';}catch(ex){};var vk=localStorage.getItem('s_vision_key')||'';if(vk){var b64=img.split(',')[1];var xhr=new XMLHttpRequest();xhr.open('POST','https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+vk,true);xhr.setRequestHeader('Content-Type','application/json');xhr.onload=function(){if(xhr.status===200){var d=JSON.parse(xhr.responseText);var txt=cleanText(d.candidates?.[0]?.content?.parts?.[0]?.text||'Cannot analyze.');setResponse(txt);speakClean(txt);}else{setResponse('Vision error.');}};xhr.onerror=function(){setResponse('Vision error.');};xhr.send(JSON.stringify({contents:[{parts:[{text:prompt},{inline_data:{mime_type:uploadedFile.type,data:b64}}]}]}));}else{callAI('Image uploaded. Prompt: '+prompt).then(function(r){setResponse(r);});}};reader.readAsDataURL(uploadedFile);}
+  else if(uploadedFile.type.startsWith('text/')||uploadedFile.name.match(/\.(json|js|py|html|css|txt)$/)){var reader2=new FileReader();reader2.onload=function(e){callAI('File: '+e.target.result.substring(0,2000)+'\nPrompt: '+prompt).then(function(r){setResponse(r);speakClean(r);});};reader2.readAsText(uploadedFile);}
+  else{setResponse('Type: '+uploadedFile.type+'. Prompt: '+prompt);}
   uploadedFile=null;document.getElementById('fileName').textContent='';document.getElementById('filePrompt').value='';document.getElementById('dropArea').classList.remove('has-file');
 }
 
 // ═══════════════ SETTINGS ═══════════════
-let cfg={key:localStorage.getItem('s_key')||'',model:localStorage.getItem('s_model')||'openai/gpt-oss-120b:free'};
+var cfg={key:localStorage.getItem('s_key')||'',model:localStorage.getItem('s_model')||'openai/gpt-oss-120b:free'};
 function openSettings(){
   document.getElementById('api-key').value=cfg.key;document.getElementById('vision-key').value=localStorage.getItem('s_vision_key')||'';
-  document.getElementById('news-key').value=localStorage.getItem('s_news_key')||'';document.getElementById('google-key').value=localStorage.getItem('s_google_key')||'';
-  document.getElementById('google-cx').value=localStorage.getItem('s_google_cx')||'';document.getElementById('stability-key').value=localStorage.getItem('s_stability_key')||'';
-  document.getElementById('weather-key').value=localStorage.getItem('s_weather_key')||'';
-  document.getElementById('elevenlabs-key').value=localStorage.getItem('11labs_key')||'';
-  document.getElementById('voice-id').value=localStorage.getItem('11labs_voice')||'';
-  document.getElementById('use-11labs').checked=localStorage.getItem('use_11labs')==='on';
+  document.getElementById('news-key').value=localStorage.getItem('s_news_key')||'';document.getElementById('stability-key').value=localStorage.getItem('s_stability_key')||'';
+  document.getElementById('elevenlabs-key').value=localStorage.getItem('11labs_key')||'';document.getElementById('voice-id').value=localStorage.getItem('11labs_voice')||'';
+  document.getElementById('use-11labs').checked=localStorage.getItem('use_11labs')==='on';document.getElementById('news-toggle').checked=localStorage.getItem('s_news')!=='off';
   populateModelSelect();document.getElementById('settingsModal').classList.add('open');
 }
 function saveSettings(){
   localStorage.setItem('s_key',document.getElementById('api-key').value.trim());localStorage.setItem('s_model',document.getElementById('api-model').value);
   localStorage.setItem('s_vision_key',document.getElementById('vision-key').value.trim());localStorage.setItem('s_news_key',document.getElementById('news-key').value.trim());
-  localStorage.setItem('s_google_key',document.getElementById('google-key').value.trim());localStorage.setItem('s_google_cx',document.getElementById('google-cx').value.trim());
-  localStorage.setItem('s_stability_key',document.getElementById('stability-key').value.trim());localStorage.setItem('s_weather_key',document.getElementById('weather-key').value.trim());
-  localStorage.setItem('11labs_key',document.getElementById('elevenlabs-key').value.trim());
-  localStorage.setItem('11labs_voice',document.getElementById('voice-id').value.trim());
-  cfg.key=localStorage.getItem('s_key')||'';cfg.model=localStorage.getItem('s_model')||'openai/gpt-oss-120b:free';closeModal('settingsModal');setResponse('Settings saved!');
+  localStorage.setItem('s_stability_key',document.getElementById('stability-key').value.trim());localStorage.setItem('11labs_key',document.getElementById('elevenlabs-key').value.trim());
+  localStorage.setItem('11labs_voice',document.getElementById('voice-id').value.trim());cfg.key=localStorage.getItem('s_key')||'';cfg.model=localStorage.getItem('s_model')||'openai/gpt-oss-120b:free';
+  closeModal('settingsModal');setResponse('Settings saved!');fetchNews();
 }
 
-// ═══════════════ INFO PANELS ═══════════════
 function showPanel(type){
-  const t=document.getElementById('infoTitle'),c=document.getElementById('infoContent');
-  if(type==='HISTORY'){t.textContent='🕒 HISTORY';let h='';for(let i=history.length-1;i>=0;i--){h+=`<div><span>${history[i].role==='user'?'🧑':'🤖'}:</span> ${history[i].content.substring(0,100)}</div>`;}c.innerHTML=h||'No history yet.';}
-  else if(type==='MEMORY'){const mem=performance?.memory;t.textContent='🧠 MEMORY';c.innerHTML=`<div>JS Heap: <span>${mem?Math.round(mem.usedJSHeapSize/1048576):'N/A'} MB</span></div><div>History: <span>${history.length}</span></div><div>News: <span>${newsItems.length}</span></div>`;}
-  else if(type==='USER'){t.textContent='👤 USER';c.innerHTML=`<div>🔑 API: <span>${cfg.key?'✅':'❌'}</span></div><div>👁️ Vision: <span>${localStorage.getItem('s_vision_key')?'✅':'❌'}</span></div><div>🎙️ ElevenLabs: <span>${localStorage.getItem('11labs_key')?'✅':'❌'}</span></div><div>🎨 Image Gen: <span>${localStorage.getItem('s_stability_key')?'✅':'❌'}</span></div><div>💬 Messages: <span>${history.length}</span></div>`;}
+  var t=document.getElementById('infoTitle'),c=document.getElementById('infoContent');
+  if(type==='HISTORY'){t.textContent='🕒 HISTORY';var h='';for(var i=history.length-1;i>=0;i--){h+='<div><span>'+(history[i].role==='user'?'You':'STONIC')+':</span> '+history[i].content.substring(0,100)+'</div>';}c.innerHTML=h||'No history yet.';}
+  else if(type==='MEMORY'){var mem=performance?.memory;t.textContent='🧠 MEMORY';c.innerHTML='<div>JS Heap: <span>'+(mem?Math.round(mem.usedJSHeapSize/1048576):'N/A')+' MB</span></div><div>History: <span>'+history.length+'</span></div>';}
+  else if(type==='USER'){t.textContent='👤 USER';c.innerHTML='<div>API: <span>'+(cfg.key?'✅':'❌')+'</span></div><div>News: <span>'+(localStorage.getItem('s_news_key')?'GNews':'Free')+'</span></div><div>Voice: <span>'+(localStorage.getItem('11labs_key')?'ElevenLabs':'Browser')+'</span></div>';}
   document.getElementById('infoPanel').classList.add('open');
 }
 
-function executeFeature(f){
-  switch(f){case'weather':sendCmd('weather today');break;case'translate':sendCmd('translate hello to Hindi');break;case'quote':sendCmd('motivational quote');break;case'joke':sendCmd('tell me a joke');break;case'code':sendCmd('python factorial function');break;case'reminder':sendCmd('remind me to drink water');break;}
-}
-
-// ═══════════════ MODELS ═══════════════
-const ALL_MODELS=[{id:"openai/gpt-oss-120b:free",name:"GPT-OSS 120B"},{id:"nousresearch/hermes-3-llama-3.1-405b:free",name:"Hermes 3 405B"},{id:"google/gemma-4-26b-a4b:free",name:"Gemma 4 26B"},{id:"meta-llama/llama-3.3-70b-instruct:free",name:"Llama 3.3 70B"},{id:"qwen/qwen3-next-80b-a3b-instruct:free",name:"Qwen3 Next 80B"}];
-function populateModelSelect(){const s=document.getElementById('api-model');s.innerHTML=ALL_MODELS.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');s.value=localStorage.getItem('s_model')||'openai/gpt-oss-120b:free';}
+var ALL_MODELS=[{id:"openai/gpt-oss-120b:free",name:"GPT-OSS 120B"},{id:"nousresearch/hermes-3-llama-3.1-405b:free",name:"Hermes 3 405B"},{id:"google/gemma-4-26b-a4b:free",name:"Gemma 4 26B"},{id:"meta-llama/llama-3.3-70b-instruct:free",name:"Llama 3.3 70B"},{id:"qwen/qwen3-next-80b-a3b-instruct:free",name:"Qwen3 Next 80B"}];
+function populateModelSelect(){var s=document.getElementById('api-model');s.innerHTML=ALL_MODELS.map(function(m){return'<option value="'+m.id+'">'+m.name+'</option>';}).join('');s.value=localStorage.getItem('s_model')||'openai/gpt-oss-120b:free';}
 
 // ═══════════════ NETVIZ ═══════════════
-const nv=document.getElementById('netviz-canvas'),nctx=nv.getContext('2d');let nvn=[];
-function initNV(){nv.width=nv.offsetWidth;nv.height=nv.offsetHeight;const cx=nv.width/2,cy=nv.height/2;nvn=[{x:cx,y:cy,r:5}];for(let i=0;i<12;i++){const a=(i/12)*Math.PI*2;nvn.push({x:cx+Math.cos(a)*40,y:cy+Math.sin(a)*40,r:2+Math.random()*3,color:i%3===0?'#00e5ff':i%3===1?'#ff4444':'#00ff88',sp:0.5+Math.random()});}}
-function drawNV(){nv.width=nv.offsetWidth;nv.height=nv.offsetHeight;nctx.clearRect(0,0,nv.width,nv.height);const t=Date.now()*0.001;nvn.forEach((n,i)=>{if(i>0){const a=(i/12)*Math.PI*2+t*n.sp;n.x=nv.width/2+Math.cos(a)*40;n.y=nv.height/2+Math.sin(a)*40;}const p=Math.sin(t*3+i)*0.5+0.5;nctx.beginPath();nctx.arc(n.x,n.y,n.r+p*2,0,Math.PI*2);nctx.fillStyle=n.color;nctx.shadowBlur=10+p*20;nctx.shadowColor=n.color;nctx.fill();nctx.shadowBlur=0;});requestAnimationFrame(drawNV);}
-setTimeout(()=>{initNV();drawNV();},200);
+(function(){var nv=document.getElementById('netviz-canvas'),nctx=nv.getContext('2d');var nvn=[];function initNV(){nv.width=nv.offsetWidth;nv.height=nv.offsetHeight;var cx=nv.width/2,cy=nv.height/2;nvn=[{x:cx,y:cy,r:5}];for(var i=0;i<8;i++){var a=(i/8)*Math.PI*2;nvn.push({x:cx+Math.cos(a)*35,y:cy+Math.sin(a)*35,r:2,color:i%2===0?'#00e5ff':'#00ff88'});}}
+function drawNV(){nv.width=nv.offsetWidth;nv.height=nv.offsetHeight;nctx.clearRect(0,0,nv.width,nv.height);nvn.forEach(function(n){nctx.beginPath();nctx.arc(n.x,n.y,n.r,0,Math.PI*2);nctx.fillStyle=n.color||'#00e5ff';nctx.fill();});requestAnimationFrame(drawNV);}
+setTimeout(function(){initNV();drawNV();},200);})();
 
 // ═══════════════ CAMERA ═══════════════
-let camOn=false,cs=null;
-async function toggleCamera(){const v=document.getElementById('cam-video'),p=document.getElementById('cam-placeholder'),b=document.getElementById('camToggleBtn');if(camOn){if(cs){cs.getTracks().forEach(t=>t.stop());cs=null;}v.style.display='none';p.style.display='flex';b.style.color='';camOn=false;}else{try{cs=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});v.srcObject=cs;v.style.display='block';p.style.display='none';b.style.color='var(--red)';camOn=true;}catch(e){setResponse('Camera denied.');}}}
-async function captureAndAsk(){const v=document.getElementById('cam-video');if(!camOn){await toggleCamera();if(!camOn)return;await new Promise(r=>setTimeout(r,1000));}const vk=localStorage.getItem('s_vision_key')||'';if(!vk){setResponse('Vision key needed.');return;}setResponse('Analyzing...');const c=document.createElement('canvas');c.width=v.videoWidth||320;c.height=v.videoHeight||240;c.getContext('2d').drawImage(v,0,0,c.width,c.height);const b64=c.toDataURL('image/jpeg',0.8).split(',')[1];try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${vk}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:'Describe in Hindi.'},{inline_data:{mime_type:'image/jpeg',data:b64}}]}]})});const d=await r.json();const txt=cleanText(d.candidates?.[0]?.content?.parts?.[0]?.text||'Cannot analyze.');setResponse(txt);speakClean(txt);}catch(e){setResponse('Vision error.');}}
+var camOn=false,cs=null;
+function toggleCamera(){var v=document.getElementById('cam-video'),p=document.getElementById('cam-placeholder'),b=document.getElementById('camToggleBtn');if(camOn){if(cs){cs.getTracks().forEach(function(t){t.stop();});cs=null;}v.style.display='none';p.style.display='flex';b.style.color='';camOn=false;}else{navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(function(stream){cs=stream;v.srcObject=cs;v.style.display='block';p.style.display='none';b.style.color='var(--red)';camOn=true;}).catch(function(){setResponse('Camera denied.');});}}
+function captureAndAsk(){var v=document.getElementById('cam-video');if(!camOn){toggleCamera();setTimeout(function(){if(camOn)captureAndAsk();},1500);return;}var vk=localStorage.getItem('s_vision_key')||'';if(!vk){setResponse('Vision key needed.');return;}setResponse('Analyzing...');var c=document.createElement('canvas');c.width=v.videoWidth||320;c.height=v.videoHeight||240;c.getContext('2d').drawImage(v,0,0,c.width,c.height);var b64=c.toDataURL('image/jpeg',0.8).split(',')[1];var xhr=new XMLHttpRequest();xhr.open('POST','https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+vk,true);xhr.setRequestHeader('Content-Type','application/json');xhr.onload=function(){if(xhr.status===200){var d=JSON.parse(xhr.responseText);var txt=cleanText(d.candidates?.[0]?.content?.parts?.[0]?.text||'Cannot analyze.');setResponse(txt);speakClean(txt);}else{setResponse('Vision error.');}};xhr.onerror=function(){setResponse('Vision error.');};xhr.send(JSON.stringify({contents:[{parts:[{text:'Describe in Hindi. Simple.'},{inline_data:{mime_type:'image/jpeg',data:b64}}]}]}));}
 
 // ═══════════════ HELPERS ═══════════════
 function setUCmd(t){document.getElementById('ucmd-bubble').textContent=t;}
@@ -326,83 +321,80 @@ function setTranscribing(t){document.getElementById('trans-bubble').textContent=
 function showThinking(o){document.getElementById('think-dots').classList.toggle('visible',o);document.getElementById('sr-dot').classList.toggle('speaking',o);}
 function cleanText(t){return t.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').replace(/[\u{2600}-\u{27BF}]/gu,'').replace(/[*_~`#@!$%^&(){}\[\]<>|\\\/+=]/g,'').replace(/\s+/g,' ').trim();}
 
-// ═══════════════ SPEAK (ElevenLabs or Browser TTS) ═══════════════
-let isSpeaking=false;
-async function speakClean(text){
-  const clean=cleanText(text);if(!clean)return;
-  const use11=localStorage.getItem('use_11labs')==='on';
-  const key11=localStorage.getItem('11labs_key')||'';
-  const voice11=localStorage.getItem('11labs_voice')||'21m00Tcm4TlvDq8ikWAM';
-  
-  const wl=listening;if(wl){stopVoice();isSpeaking=true;}
-  document.getElementById('tbMic').classList.add('muted');
-  document.getElementById('statusDot').textContent='🔊 SPEAKING';
-  
+// ═══════════════ SPEAK ═══════════════
+var isSpeaking=false;
+function speakClean(text){
+  var clean=cleanText(text);if(!clean)return;
+  var use11=localStorage.getItem('use_11labs')==='on',key11=localStorage.getItem('11labs_key')||'',voice11=localStorage.getItem('11labs_voice')||'21m00Tcm4TlvDq8ikWAM';
+  var wl=listening;if(wl){stopVoice();isSpeaking=true;}
+  document.getElementById('tbMic').classList.add('muted');document.getElementById('statusDot').textContent='🔊 SPEAKING';
   if(use11&&key11){
-    // ElevenLabs TTS
-    try{
-      const r=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice11}`,{
-        method:'POST',headers:{'Content-Type':'application/json','xi-api-key':key11},
-        body:JSON.stringify({text:clean,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.5,similarity_boost:0.8}})
-      });
-      if(r.ok){
-        const blob=await r.blob();
-        const audio=new Audio(URL.createObjectURL(blob));
-        audio.onended=()=>{isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');document.getElementById('statusDot').textContent='● ACTIVE';if(wl)setTimeout(()=>{if(!listening)startVoice();},2000);};
-        audio.onerror=()=>{isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');if(wl)setTimeout(()=>{if(!listening)startVoice();},2000);};
-        audio.play();
-      }else{fallbackTTS(clean,wl);}
-    }catch(e){fallbackTTS(clean,wl);}
-  }else{fallbackTTS(clean,wl);}
+    var xhr=new XMLHttpRequest();xhr.open('POST','https://api.elevenlabs.io/v1/text-to-speech/'+voice11,true);
+    xhr.setRequestHeader('Content-Type','application/json');xhr.setRequestHeader('xi-api-key',key11);
+    xhr.responseType='blob';xhr.onload=function(){if(xhr.status===200){var audio=new Audio(URL.createObjectURL(xhr.response));audio.onended=function(){isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');document.getElementById('statusDot').textContent='● ACTIVE';if(wl)setTimeout(function(){if(!listening)startVoice();},2000);};audio.play();}else{fallbackTTS(clean,wl);}};
+    xhr.onerror=function(){fallbackTTS(clean,wl);};xhr.send(JSON.stringify({text:clean,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.5,similarity_boost:0.8}}));
+  }else fallbackTTS(clean,wl);
+}
+function fallbackTTS(text,wl){if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=0.9;u.onend=function(){isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');document.getElementById('statusDot').textContent='● ACTIVE';if(wl)setTimeout(function(){if(!listening)startVoice();},2000);};u.onerror=function(){isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');if(wl)setTimeout(function(){if(!listening)startVoice();},2000);};window.speechSynthesis.speak(u);}}
+
+// ═══════════════ VOICE ═══════════════
+var listening=false,recognition=null;
+function startVoice(){var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;if(recognition)try{recognition.stop();}catch(e){}recognition=new SR();recognition.lang='hi-IN';recognition.continuous=false;recognition.onstart=function(){listening=true;document.getElementById('tbMic').classList.add('active');};recognition.onresult=function(e){var t=e.results[0][0].transcript.trim();if(t&&!isProcessing&&!isSpeaking)sendCmd(t);};recognition.onerror=function(){listening=false;document.getElementById('tbMic').classList.remove('active','muted');if(!isSpeaking)setTimeout(function(){if(!listening)startVoice();},2000);};recognition.onend=function(){listening=false;document.getElementById('tbMic').classList.remove('active','muted');if(!isSpeaking)setTimeout(function(){if(!listening)startVoice();},1000);};try{recognition.start();}catch(e){}}
+function stopVoice(){if(recognition){try{recognition.stop();}catch(e){}recognition=null;}listening=false;document.getElementById('tbMic').classList.remove('active','muted');}
+function toggleVoice(){listening?stopVoice():startVoice();}
+
+// ═══════════════ COMMANDS ═══════════════
+var isProcessing=false,history=[];
+function sendCmd(cmd){try{cmd=cmd||document.getElementById('cmd-input').value.trim();}catch(e){return;}if(!cmd||isProcessing)return;try{document.getElementById('cmd-input').value='';}catch(e){}isProcessing=true;setUCmd(cmd);showThinking(true);setResponse('');process(cmd).then(function(r){showThinking(false);setResponse(r);setTranscribing(r);isProcessing=false;});}
+document.getElementById('cmd-send').addEventListener('click',function(e){e.preventDefault();sendCmd();});
+
+function process(msg){var c=msg.toLowerCase().trim();
+  if(/time|samay/.test(c))return Promise.resolve('Time: '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
+  if(/date|tarikh/.test(c))return Promise.resolve('Date: '+new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}));
+  if(/youtube.*play|youtube.*chalao|youtube.*gana|play.*youtube/.test(c)){var q=c.replace(/youtube|play|chalao|gana|video|song|on|par|pe|ko|kholo/gi,'').trim()||'music';openUrl('https://www.youtube.com/results?search_query='+encodeURIComponent(q));return Promise.resolve('▶️ YouTube: '+q);}
+  if(/youtube|yt/.test(c)){launchApp('youtube');return Promise.resolve('▶️ YouTube opened');}
+  if(/whatsapp.*message|whatsapp.*bhejo|wp.*message/.test(c)){var name='',message='';var tm=c.match(/(?:whatsapp|wp).*(?:message|bhejo|send)\s+(?:to\s+)?(\S+)/i);var mm=c.match(/(?:message|bhejo|send)\s+(?:hai|he|ye|ki)?\s*(.+)/i);if(tm)name=tm[1];if(mm)message=mm[1].replace(/whatsapp|wp|message|bhejo|send|to/gi,'').trim();if(!name)return Promise.resolve('Kisko message bhejna hai?');var contact=findContact(name);var number=contact?contact.num:name.replace(/\s/g,'');openUrl('https://wa.me/'+number+'?text='+encodeURIComponent(message||'Hello'));return Promise.resolve('💬 WhatsApp: '+(contact?contact.name:number));}
+  if(/whatsapp|wp/.test(c)){launchApp('whatsapp');return Promise.resolve('💬 WhatsApp opened');}
+  if(/call.*karo|phone.*karo|dial/.test(c)){var name2=c.replace(/call|karo|phone|dial|number|ko|par|pe/gi,'').trim();if(!name2)return Promise.resolve('Kisko call karna hai?');var contact2=findContact(name2);var number2=contact2?contact2.num:name2.replace(/\s/g,'');openUrl('tel:'+number2);return Promise.resolve('📞 Calling '+(contact2?contact2.name:number2));}
+  if(/call|phone/.test(c)){launchApp('call');return Promise.resolve('📞 Dialer opened');}
+  if(/sms.*bhejo|sms.*send|text.*bhejo/.test(c)){var name3='',message3='';var tm3=c.match(/(?:sms|text).*(?:bhejo|send)\s+(?:to\s+)?(\S+)/i);var mm3=c.match(/(?:bhejo|send)\s+(?:hai|he|ye|ki)?\s*(.+)/i);if(tm3)name3=tm3[1];if(mm3)message3=mm3[1].replace(/sms|text|bhejo|send|to/gi,'').trim();if(!name3)return Promise.resolve('Kisko SMS bhejna hai?');var contact3=findContact(name3);var number3=contact3?contact3.num:name3.replace(/\s/g,'');openUrl('sms:'+number3+'?body='+encodeURIComponent(message3||'Hello'));return Promise.resolve('✉️ SMS to '+(contact3?contact3.name:number3));}
+  if(/sms|message/.test(c)){openUrl('sms:');return Promise.resolve('✉️ SMS opened');}
+  if(/music|gana|song|play.*music|bajao/.test(c)){launchApp('music');return Promise.resolve('🎵 Music opened');}
+  if(/map|maps|location|kahan|rasta/.test(c)){launchApp('map');return Promise.resolve('📍 Maps opened');}
+  if(/alarm|alaram|clock|ghadi|timer/.test(c)){launchApp('alarm');return Promise.resolve('⏰ Clock opened');}
+  if(/camera on|cam on|camera kholo/.test(c)){toggleCamera();return Promise.resolve(camOn?'📷 Camera on':'📷 Camera off');}
+  if(/camera off|cam off|camera band/.test(c)){if(camOn)toggleCamera();return Promise.resolve('📷 Camera off');}
+  if(/weather|mausam/.test(c)){openUrl('https://www.google.com/search?q=weather+today');return Promise.resolve('🌤️ Weather check');}
+  if(/google|search|khojo/.test(c)){var q2=c.replace(/google|search|khojo|dhundho|karo|par|pe/gi,'').trim()||'';openUrl('https://www.google.com/search?q='+encodeURIComponent(q2));return Promise.resolve('🔍 Google: '+q2);}
+  if(/add contact|contact add|save number/.test(c)){var nm=prompt('Contact name:'),num=prompt('Phone number:');if(nm&&num){contacts.push({name:nm,num:num});localStorage.setItem('stonic_contacts',JSON.stringify(contacts));return Promise.resolve('✅ Contact saved: '+nm);}return Promise.resolve('Cancelled.');}
+  if(/contacts|contact list/.test(c)){return Promise.resolve(contacts.length?'📇 '+contacts.map(function(cc){return cc.name+': '+cc.num;}).join(', '):'No contacts.');}
+  if(/settings|config|admin/.test(c)){openSettings();return Promise.resolve('⚙️ Settings opened');}
+  if(/upload|file/.test(c)){openFileUpload();return Promise.resolve('📂 Upload opened');}
+  if(/news|headlines|khabar/.test(c)){fetchNews();return Promise.resolve('📰 News refreshed');}
+  if(/hello|hi|hey|namaste/.test(c))return Promise.resolve('Namaste! Main STONIC hoon.');
+  if(!cfg.key)return Promise.resolve('No API key. Settings mein add karein.');
+  return callAI(msg);
 }
 
-function fallbackTTS(text,wl){
-  if('speechSynthesis' in window){
-    window.speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=0.9;
-    u.onend=()=>{isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');document.getElementById('statusDot').textContent='● ACTIVE';if(wl)setTimeout(()=>{if(!listening)startVoice();},2000);};
-    u.onerror=()=>{isSpeaking=false;document.getElementById('tbMic').classList.remove('muted');if(wl)setTimeout(()=>{if(!listening)startVoice();},2000);};
-    window.speechSynthesis.speak(u);
-  }
+function callAI(msg){
+  history.push({role:'user',content:msg});if(history.length>30)history=history.slice(-30);
+  return new Promise(function(resolve,reject){
+    var xhr=new XMLHttpRequest();
+    xhr.open('POST','https://openrouter.ai/api/v1/chat/completions',true);
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.setRequestHeader('Authorization','Bearer '+cfg.key);
+    xhr.onload=function(){
+      if(xhr.status===200){
+        var d=JSON.parse(xhr.responseText);var raw=d.choices?.[0]?.message?.content||'No response';var cl=cleanText(raw);
+        history.push({role:'assistant',content:cl});if(history.length>30)history=history.slice(-30);speakClean(cl);resolve(cl);
+      }else{resolve('API Error '+xhr.status);}
+    };
+    xhr.onerror=function(){resolve('Network error.');};
+    xhr.send(JSON.stringify({model:cfg.model,max_tokens:300,messages:[{role:'system',content:'You are STONIC. Reply in Hindi/English. NO emojis. Plain words only.'}].concat(history)}));
+  });
 }
 
-let listening=false,recognition=null;
-function startVoice(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;if(recognition)try{recognition.stop()}catch(e){}recognition=new SR();recognition.lang='hi-IN';recognition.continuous=false;recognition.onstart=()=>{listening=true;document.getElementById('tbMic').classList.add('active');};recognition.onresult=e=>{const t=e.results[0][0].transcript.trim();if(t&&!isProcessing&&!isSpeaking)sendCmd(t);};recognition.onerror=()=>{listening=false;document.getElementById('tbMic').classList.remove('active','muted');if(!isSpeaking)setTimeout(()=>{if(!listening)startVoice();},2000);};recognition.onend=()=>{listening=false;document.getElementById('tbMic').classList.remove('active','muted');if(!isSpeaking)setTimeout(()=>{if(!listening)startVoice();},1000);};try{recognition.start()}catch(e){}}
-function stopVoice(){if(recognition){try{recognition.stop()}catch(e){}recognition=null;}listening=false;document.getElementById('tbMic').classList.remove('active','muted');}
-function toggleVoice(){listening?stopVoice():(startVoice(),listening=true);}
-
-let isProcessing=false,history=[];
-async function sendCmd(cmd){try{cmd=cmd||document.getElementById('cmd-input').value.trim()}catch(e){return}if(!cmd||isProcessing)return;try{document.getElementById('cmd-input').value=''}catch(e){}isProcessing=true;setUCmd(cmd);showThinking(true);setResponse('');try{const r=await process(cmd);showThinking(false);setResponse(r);setTranscribing(r);}catch(e){showThinking(false);setResponse('Error: '+e.message);}isProcessing=false;}
-document.getElementById('cmd-send').addEventListener('click',e=>{e.preventDefault();sendCmd();});
-
-async function process(msg){
-  const c=msg.toLowerCase().trim();
-  if(/time|samay/.test(c))return'Time: '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-  if(/date|tarikh/.test(c))return'Date: '+new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  if(/youtube/.test(c)){window.open('https://youtube.com','_blank');return'YouTube opened';}
-  if(/whatsapp/.test(c)){window.open('https://wa.me/','_blank');return'WhatsApp opened';}
-  if(/google/.test(c)){window.open('https://google.com/search?q='+encodeURIComponent(c.replace(/google/gi,'').trim()||''),'_blank');return'Google search';}
-  if(/camera on|cam on/.test(c)){toggleCamera();return camOn?'Camera on':'Camera off';}
-  if(/camera off|cam off/.test(c)){if(camOn)toggleCamera();return'Camera off';}
-  if(/hello|hi|namaste/.test(c))return'Namaste. Main STONIC hoon.';
-  if(/upload|file/.test(c)){openFileUpload();return'Upload window opened.';}
-  if(/news|headlines/.test(c)){fetchNews();return'News refreshed.';}
-  if(/news sunao|padhke sunao/.test(c)){readCurrentNews();return'Reading...';}
-  if(/admin|settings|config/.test(c)){openSettings();return'Settings opened.';}
-  if(!cfg.key)return'No API key. Settings mein add karein.';
-  return await callAI(msg);
-}
-
-async function callAI(msg){
-  history.push({role:'user',content:msg});if(history.length>50)history=history.slice(-50);
-  const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key,'HTTP-Referer':location.href},body:JSON.stringify({model:cfg.model,max_tokens:300,messages:[{role:'system',content:'Reply in Hindi/English. NO emojis. Plain words.'},...history]})});
-  if(!r.ok)throw new Error('API '+r.status);
-  const d=await r.json();const raw=d.choices?.[0]?.message?.content||'No response';const cl=cleanText(raw);
-  history.push({role:'assistant',content:cl});if(history.length>50)history=history.slice(-50);
-  speakClean(cl);return cl;
-}
-
-populateModelSelect();setResponse('STONIC Ultimate ready.');setTimeout(()=>startVoice(),1500);
+populateModelSelect();setResponse('STONIC v3.0 Ready.');setTimeout(function(){startVoice();},1500);
 </script>
 </body>
 </html>
